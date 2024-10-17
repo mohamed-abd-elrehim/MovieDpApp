@@ -1,0 +1,6 @@
+package com.example.banquemisrchallenge05movieapp.utils.data_layer
+
+import com.example.banquemisrchallenge05movieapp.utils.data_layer.local.LocalDataSource
+import com.example.banquemisrchallenge05movieapp.utils.data_layer.remote.RemoteDataSource
+
+interface Repository : RemoteDataSource,LocalDataSource
