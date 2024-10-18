@@ -14,7 +14,7 @@ import com.example.banquemisrchallenge05movieapp.ui.theme.PrimaryColor
 
 
 @Composable
-fun EShopButton(
+fun MovieAppButton(
     text: String,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,

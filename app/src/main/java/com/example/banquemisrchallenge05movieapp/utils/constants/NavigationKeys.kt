@@ -8,6 +8,13 @@ object NavigationKeys {
 
     // Passed Values
     const val DetailScreenMovieId = "movieId"
+
+
+    //Tab Row Keys
+    const val NowPlaying = "NowPlaying"
+    const val Popular = "Popular"
+    const val Upcoming = "Upcoming"
+
 }
 
 

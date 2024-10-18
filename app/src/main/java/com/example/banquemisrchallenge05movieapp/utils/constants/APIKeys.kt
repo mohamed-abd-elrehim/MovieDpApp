@@ -28,6 +28,7 @@ object APIKeys {
     const val INCLUDE_ADULT_PARAM = "include_adult"
     const val INCLUDE_VIDEO_PARAM = "include_video"
     const val REGION_PARAM = "region"
+    const val APIKey = "api_key"
 
 
 
