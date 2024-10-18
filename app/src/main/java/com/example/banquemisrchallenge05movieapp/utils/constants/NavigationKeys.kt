@@ -11,7 +11,7 @@ object NavigationKeys {
 
 
     //Tab Row Keys
-    const val NowPlaying = "NowPlaying"
+    const val NowPlaying = "Now Playing"
     const val Popular = "Popular"
     const val Upcoming = "Upcoming"
 

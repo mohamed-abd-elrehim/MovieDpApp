@@ -14,5 +14,7 @@
     <string name="timeout_error">Request timed out. Please try again.</string>
     <string name="unexpected_error">An unexpected error occurred. Please try again later</string>
     <string name="see_details">See Details</string>
+    <string name="next_page">Next Page</string>
+    <string name="previous_page">Previous Page</string>
 
 </resources>

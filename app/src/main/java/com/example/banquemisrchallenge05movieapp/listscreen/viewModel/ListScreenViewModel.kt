@@ -19,15 +19,18 @@ class ListScreenViewModel(val repository: Repository) : BaseViewModel() {
     private val _popularList = MutableStateFlow<ApiState<MovieDbResultPopular>>(ApiState.Loading)
     val popularList = _popularList.asStateFlow()
 
-    fun fetchNowPlayingList() {
-        handleFetchList({ repository.fetchNowPlayingMovies() }, _nowPlayingList)
+    private  val  _totalPages = MutableStateFlow<Int>(0)
+    val totalPages = _totalPages.asStateFlow()
+
+    fun fetchNowPlayingList( page: Int) {
+        handleFetchList({ repository.fetchNowPlayingMovies( page = page) }, _nowPlayingList, _totalPages)
     }
 
-    fun fetchPopularList() {
-        handleFetchList({ repository.fetchPopularMovies() }, _popularList)
+    fun fetchPopularList(page: Int) {
+        handleFetchList({ repository.fetchPopularMovies( page = page) }, _popularList,_totalPages)
     }
 
-    fun fetchUpcomingList() {
-        handleFetchList({ repository.fetchUpcomingMovies() }, _upcomingList)
+    fun fetchUpcomingList(page: Int) {
+        handleFetchList({ repository.fetchUpcomingMovies(page = page) }, _upcomingList,_totalPages)
     }
 }

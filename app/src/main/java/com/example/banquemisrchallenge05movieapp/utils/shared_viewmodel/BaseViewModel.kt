@@ -3,6 +3,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.banquemisrchallenge05movieapp.R
 import com.example.banquemisrchallenge05movieapp.utils.shared_models.ApiState
+import com.example.banquemisrchallenge05movieapp.utils.shared_models.MovieDbResultNowPlaying
+import com.example.banquemisrchallenge05movieapp.utils.shared_models.MovieDbResultPopular
+import com.example.banquemisrchallenge05movieapp.utils.shared_models.MovieDbResultUpcoming
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -31,12 +34,32 @@ abstract class BaseViewModel : ViewModel() {
 
     protected fun <T> handleFetchList(
         fetch: suspend () -> Flow<T>,
-        stateFlow: MutableStateFlow<ApiState<T>>
+        stateFlow: MutableStateFlow<ApiState<T>>,
+        totalPage: MutableStateFlow<Int>
+
+
     ) {
         viewModelScope.launch(Dispatchers.IO + exceptionHandler) {
             try {
                 fetch().collect { result ->
                     stateFlow.value = ApiState.Success(result)
+
+                    when (result) {
+                        is MovieDbResultNowPlaying -> {
+                            totalPage.value = result.total_pages
+                        }
+                        is MovieDbResultPopular -> {
+                            totalPage.value = result.total_pages
+                        }
+                        is MovieDbResultUpcoming -> {
+                            totalPage.value = result.total_pages
+                        }
+                        else -> {
+                            totalPage.value = 0
+                        }
+
+                    }
+
                 }
             } catch (e: Exception) {
                 stateFlow.value = ApiState.Error(R.string.unexpected_error)
