@@ -14,19 +14,19 @@ import retrofit2.http.Query
 interface RemoteDataSource {
 
     suspend fun fetchUpcomingMovies(
-        language: String,
-        page: Int
+        language: String = "en-US",
+        page: Int = 1
     ): Flow<MovieDbResultUpcoming>
 
 
     suspend fun fetchPopularMovies(
-        language: String,
-        page: Int
+        language: String = "en-US",
+        page: Int = 1
     ): Flow<MovieDbResultPopular>
 
     suspend fun fetchNowPlayingMovies(
-        language: String,
-        page: Int
+        language: String = "en-US",
+        page: Int = 1
     ): Flow<MovieDbResultNowPlaying>
 
     suspend fun fetchMovieDetails(

@@ -1,4 +1,17 @@
 <resources>
-    <string name="app_name">banquemisr.challenge05.movieapp</string>
+    <string name="app_name">banquemisr.challenge05</string>
     <string name="remove">Remove</string>
+    <string name="back">Back</string>
+    <string name="list_screen">List Screen</string>
+    <string name="unknown_viewmodel_class">Unknown ViewModel class</string>
+    <string name="detail_screen">Detail Screen</string>
+    <string name="splash_screen">SplashScreen</string>
+
+
+
+    <string name="network_error">Network error. Please check your connection.</string>
+    <string name="server_error">Server error. Please try again later.</string>
+    <string name="timeout_error">Request timed out. Please try again.</string>
+    <string name="unexpected_error">An unexpected error occurred. Please try again later</string>
+
 </resources>

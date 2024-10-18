@@ -16,7 +16,7 @@
         android:theme="@style/Theme.Banquemisrchallenge05movieapp"
         tools:targetApi="31">
         <activity
-            android:name=".mainscreen.view.MainActivity"
+            android:name=".startscreen.view.MainActivity"
             android:exported="true"
             android:label="@string/app_name"
             android:theme="@style/Theme.Banquemisrchallenge05movieapp">
