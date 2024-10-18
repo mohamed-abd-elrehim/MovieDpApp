@@ -38,7 +38,6 @@ data class MovieResult(
 
 
 
-
 // Movie Details
 data class MovieDetails(
     val adult: Boolean,

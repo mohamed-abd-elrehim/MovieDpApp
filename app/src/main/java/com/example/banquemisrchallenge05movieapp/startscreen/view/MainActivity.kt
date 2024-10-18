@@ -8,6 +8,7 @@ import androidx.compose.material3.Surface
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.banquemisrchallenge05movieapp.detailscreen.view.DetailScreen
 import com.example.banquemisrchallenge05movieapp.listscreen.viewModel.ListScreenViewModelFactory
 import com.example.banquemisrchallenge05movieapp.mainhome.view.MainHomeScreen
 import com.example.banquemisrchallenge05movieapp.utils.data_layer.RepositoryImpl
@@ -34,7 +35,9 @@ class MainActivity : ComponentActivity() {
             MaterialTheme {
                 Surface {
                     val navController = rememberNavController()
-                    NavHost(navController, startDestination = Screen.ListScreen.route) {
+                    DetailScreen(navController)
+
+                  /*  NavHost(navController, startDestination = Screen.ListScreen.route) {
                         composable(Screen.ListScreen.route) {
                             MainHomeScreen(
                                 listScreenViewModelFactory,
@@ -43,7 +46,7 @@ class MainActivity : ComponentActivity() {
 
                         }
 
-                    }
+                    }*/
 
 
                 }
