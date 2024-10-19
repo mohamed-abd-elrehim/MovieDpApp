@@ -9,7 +9,7 @@ import com.example.banquemisrchallenge05movieapp.utils.shared_models.ApiState
 
 
 @Composable
-fun <T> ApiCallState(navController: NavController, apiState: ApiState<T>) {
+fun <T> ApiCallState(navController: NavController, apiState: ApiState<T> , onSuccess: @Composable (T) -> Unit) {
     val context=LocalContext.current
     val TAG="ApiCallState"
 
@@ -19,7 +19,8 @@ fun <T> ApiCallState(navController: NavController, apiState: ApiState<T>) {
         }
 
         is ApiState.Success -> {
-            ListContent(navController,apiState.data)
+            ListContent(navController , apiState.data)
+            onSuccess(apiState.data)
 
         }
 

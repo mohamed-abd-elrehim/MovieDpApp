@@ -23,6 +23,18 @@ class ListScreenViewModel(private val repository: Repository) : BaseViewModel() 
     private val _popularList = MutableStateFlow<ApiState<MovieDbResultPopular>>(ApiState.Loading)
     val popularList = _popularList.asStateFlow()
 
+
+
+    private val _localUpcomingList = MutableStateFlow<MovieDbResultUpcoming?>(null)
+    val localUpcomingList = _localUpcomingList.asStateFlow()
+
+    private val _localNowPlayingList =
+        MutableStateFlow<MovieDbResultNowPlaying?>(null)
+    val localNowPlayingList = _localNowPlayingList.asStateFlow()
+
+    private val _localPopularList = MutableStateFlow<MovieDbResultPopular?>(null)
+    val localPopularList = _localPopularList.asStateFlow()
+
     private val _totalPages = MutableStateFlow<Int>(0)
     val totalPages = _totalPages.asStateFlow()
 
@@ -62,22 +74,37 @@ class ListScreenViewModel(private val repository: Repository) : BaseViewModel() 
     }
 
 
-    fun getPopularMovies(page: Int){
+    fun getPopularMovies(page: Int)  {
         viewModelScope.launch(Dispatchers.IO) {
-            repository.getPopularMovies(page)
+             repository.getPopularMovies(page).collect{
+                 _localPopularList.value = it
+                 if (it != null) {
+                     _totalPages.value = it.total_pages
+                 }
+             }
         }
 
     }
 
     fun getUpcomingMovies(page: Int) {
         viewModelScope.launch(Dispatchers.IO) {
-            repository.getUpcomingMovies(page)
+             repository.getUpcomingMovies(page).collect{
+                 _localUpcomingList.value = it
+                 if (it != null) {
+                     _totalPages.value = it.total_pages
+                 }
+             }
         }
     }
 
     fun getNowPlayingMovies(page: Int){
         viewModelScope.launch(Dispatchers.IO) {
-            repository.getNowPlayingMovies(page)
+            repository.getNowPlayingMovies(page).collect{
+                _localNowPlayingList.value = it
+                if (it != null) {
+                    _totalPages.value = it.total_pages
+                }
+            }
         }
     }
 

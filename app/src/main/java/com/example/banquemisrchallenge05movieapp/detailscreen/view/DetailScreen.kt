@@ -48,7 +48,6 @@ fun DetailScreen(navController: NavHostController, viewModel: DetailViewModel, m
     var movie by remember { mutableStateOf<MovieDetails?>(null) }
 
     if (localMovieDetails != null) {
-        Log.d("DetailScreen", "Local Movie Details: ${localMovieDetails?.title}")
         movie = localMovieDetails
     }
 
