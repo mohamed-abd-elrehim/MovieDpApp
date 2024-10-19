@@ -18,9 +18,11 @@ import com.example.banquemisrchallenge05movieapp.utils.data_layer.RepositoryImpl
 import com.example.banquemisrchallenge05movieapp.utils.data_layer.local.LocalDataSourceImpl
 import com.example.banquemisrchallenge05movieapp.utils.data_layer.remote.RemoteDataSourceImpl
 import com.example.banquemisrchallenge05movieapp.utils.navigation.Screen
+import com.example.banquemisrchallenge05movieapp.utils.shared_methods.InternetChecker
 
 
 class MainActivity : ComponentActivity() {
+    private lateinit var internetChecker: InternetChecker
     private val repository by lazy {
         RepositoryImpl.getInstance(
             RemoteDataSourceImpl.getInstance(),
@@ -37,6 +39,8 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        internetChecker = InternetChecker(this)
+        internetChecker.startMonitoring()
         setContent {
             MaterialTheme {
                 Surface {
@@ -60,6 +64,10 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
+    }
+    override fun onDestroy() {
+        super.onDestroy()
+        internetChecker.stopMonitoring()
     }
 }
 

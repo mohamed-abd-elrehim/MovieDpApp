@@ -17,5 +17,10 @@
     <string name="next_page">Next Page</string>
     <string name="previous_page">Previous Page</string>
     <string name="movie_details">Movie Details</string>
+    <string name="no_data_found">No Data Found</string>
+    <string name="production_companies">Production Companies:</string>
+    <string name="no_overview">" No Overview "</string>
+    <string name="overview">Overview:</string>
+    <string name="no_internet_connection">No Internet Connection</string>
 
 </resources>

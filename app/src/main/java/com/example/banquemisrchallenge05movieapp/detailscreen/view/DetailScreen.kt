@@ -31,10 +31,13 @@ import com.example.banquemisrchallenge05movieapp.utils.constants.APIKeys
 import com.example.banquemisrchallenge05movieapp.utils.shared_components.BackButton
 import com.example.banquemisrchallenge05movieapp.utils.shared_components.Gap
 import com.example.banquemisrchallenge05movieapp.utils.shared_components.HeaderText
+import com.example.banquemisrchallenge05movieapp.utils.shared_components.LottieWithText
 import com.example.banquemisrchallenge05movieapp.utils.shared_components.MovieAppLoadingIndicator
+import com.example.banquemisrchallenge05movieapp.utils.shared_components.SharedHeader
 import com.example.banquemisrchallenge05movieapp.utils.shared_methods.LoadAsyncImage
 import com.example.banquemisrchallenge05movieapp.utils.shared_models.ApiState
 import com.example.banquemisrchallenge05movieapp.utils.shared_models.MovieDetails
+import com.example.banquemisrchallenge05movieapp.utils.shared_models.isNetworkAvailable
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -58,7 +61,7 @@ fun DetailScreen(navController: NavHostController, viewModel: DetailViewModel, m
     val movieDetails by viewModel.movieDetails.collectAsStateWithLifecycle()
     val scrollState = rememberLazyListState()
 
-    if (movie == null) {
+    if (movie == null && isNetworkAvailable(context)) {
         when (movieDetails) {
             ApiState.Loading -> {
                 MovieAppLoadingIndicator()
@@ -227,14 +230,14 @@ fun DetailScreen(navController: NavHostController, viewModel: DetailViewModel, m
                     Gap(height = 16)
 
                     Text(
-                        text = "Overview:",
+                        text = stringResource(R.string.overview),
                         fontWeight = FontWeight.Bold,
                         fontSize = 18.sp,
                         modifier = Modifier.fillMaxWidth()
                     )
 
                     Text(
-                        text = movie?.overview ?: " No Overview ",
+                        text = movie?.overview ?: stringResource(R.string.no_overview),
                         fontSize = 16.sp,
                         textAlign = TextAlign.Justify,
                         modifier = Modifier.fillMaxWidth()
@@ -243,7 +246,7 @@ fun DetailScreen(navController: NavHostController, viewModel: DetailViewModel, m
                     Gap(height = 16)
 
                     Text(
-                        text = "Production Companies:",
+                        text = stringResource(R.string.production_companies),
                         fontWeight = FontWeight.Bold,
                         fontSize = 18.sp,
                         modifier = Modifier.fillMaxWidth()
@@ -259,6 +262,15 @@ fun DetailScreen(navController: NavHostController, viewModel: DetailViewModel, m
                     }
                 }
             }
+        }
+    }else {
+        Column {
+            SharedHeader(
+                navController = navController,
+                headerText = stringResource(R.string.movie_details)
+            )
+            Gap(height = 16)
+            LottieWithText(R.raw.no_internet, stringResource(R.string.no_internet_connection))
         }
     }
 }
