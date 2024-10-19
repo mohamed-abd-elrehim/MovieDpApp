@@ -9,6 +9,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.banquemisrchallenge05movieapp.detailscreen.view.DetailScreen
+import com.example.banquemisrchallenge05movieapp.detailscreen.viewModel.DetailScreenViewModelFactory
 import com.example.banquemisrchallenge05movieapp.listscreen.viewModel.ListScreenViewModelFactory
 import com.example.banquemisrchallenge05movieapp.mainhome.view.MainHomeScreen
 import com.example.banquemisrchallenge05movieapp.utils.data_layer.RepositoryImpl
@@ -27,6 +28,9 @@ class MainActivity : ComponentActivity() {
     private val listScreenViewModelFactory by lazy {
         ListScreenViewModelFactory(repository, this)
     }
+    private val detailScreenViewModelFactory by lazy {
+        DetailScreenViewModelFactory(repository, this)
+    }
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,18 +39,18 @@ class MainActivity : ComponentActivity() {
             MaterialTheme {
                 Surface {
                     val navController = rememberNavController()
-                    DetailScreen(navController)
 
-                  /*  NavHost(navController, startDestination = Screen.ListScreen.route) {
+                  NavHost(navController, startDestination = Screen.ListScreen.route) {
                         composable(Screen.ListScreen.route) {
                             MainHomeScreen(
                                 listScreenViewModelFactory,
+                                detailScreenViewModelFactory,
 
                                 )
 
                         }
 
-                    }*/
+                    }
 
 
                 }

@@ -16,8 +16,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.example.banquemisrchallenge05movieapp.R
 import com.example.banquemisrchallenge05movieapp.utils.constants.APIKeys
+import com.example.banquemisrchallenge05movieapp.utils.constants.NavigationKeys
 import com.example.banquemisrchallenge05movieapp.utils.shared_components.Gap
 import com.example.banquemisrchallenge05movieapp.utils.shared_methods.LoadAsyncImage
 import com.example.banquemisrchallenge05movieapp.utils.shared_models.MovieResult
@@ -28,6 +30,7 @@ fun ListScreenElevationCard(
     modifier: Modifier = Modifier,
     context: Context,
     movieResult: MovieResult? = null,
+    navController: NavController
 ) {
     Card(
         modifier = modifier
@@ -43,14 +46,14 @@ fun ListScreenElevationCard(
                 Box(
                     modifier = Modifier
                         .width(200.dp)
-                        .height(200.dp)
+                        .height(170.dp)
                 ) {
                     // Load Image
                     movieResult.poster_path?.let {
                         LoadAsyncImage(
                             context = context,
                             imageUrl = APIKeys.MOVIEDB_IMAGE_URL + it,
-                            "poster",
+                            movieResult.title,
                             modifier = Modifier
                                 .fillMaxSize() // Fill the box
                                 .clip(RoundedCornerShape(12.dp))
@@ -90,6 +93,7 @@ fun ListScreenElevationCard(
                 Gap(height = 10)
 
                 MovieAppButton(text = stringResource(R.string.see_details), onClick = {
+                    navController.navigate(NavigationKeys.DetailScreen + "/${movieResult?.id}")
 
                 })
             }
@@ -98,8 +102,3 @@ fun ListScreenElevationCard(
     }
 }
 
-@Preview
-@Composable
-fun ListScreenElevationCardPreview() {
-    ListScreenElevationCard(context = LocalContext.current)
-}

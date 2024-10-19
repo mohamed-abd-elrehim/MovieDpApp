@@ -9,7 +9,7 @@ import com.example.banquemisrchallenge05movieapp.utils.shared_models.MovieDbResu
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
-class ListScreenViewModel(val repository: Repository) : BaseViewModel() {
+class ListScreenViewModel(private val repository: Repository) : BaseViewModel() {
     private val _upcomingList = MutableStateFlow<ApiState<MovieDbResultUpcoming>>(ApiState.Loading)
     val upcomingList = _upcomingList.asStateFlow()
 

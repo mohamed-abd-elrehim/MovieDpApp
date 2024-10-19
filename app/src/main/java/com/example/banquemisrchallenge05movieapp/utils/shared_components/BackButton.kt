@@ -23,7 +23,7 @@ fun BackButton(onBackClick: () -> Unit) {
     Box (modifier = Modifier.padding(top = 20.dp))
     {
         Image(
-            painter = painterResource(id = R.drawable.back_button),
+            painter = painterResource(id = R.drawable.ic_back),
             modifier = Modifier
                 .height(65.dp)
                 .width(45.dp)

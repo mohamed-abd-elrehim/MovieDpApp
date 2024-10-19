@@ -26,7 +26,6 @@ import com.example.banquemisrchallenge05movieapp.R
 fun Pagination(
     currentPage: Int=1, totalPages: Int, onPageChange: (Int) -> Unit
 ) {
-    Gap(height = 10)
 
     Row(
         modifier = Modifier
@@ -38,15 +37,17 @@ fun Pagination(
         Text(text = "Page: $currentPage / $totalPages", color = Color.Black)
 
         Row {
-            IconButton(
-                onClick = { if (currentPage > 1) onPageChange(currentPage - 1) },
-                enabled = currentPage > 1
-            ) {
-                Image(
-                    painter = painterResource(id = R.drawable.ic_previous_arrow),
-                    contentDescription = stringResource(R.string.previous_page)
-                )
+            if (currentPage > 1) {
+                IconButton(
+                    onClick = { onPageChange(currentPage - 1) }
+                ) {
+                    Image(
+                        painter = painterResource(id = R.drawable.ic_previous_arrow),
+                        contentDescription = stringResource(R.string.previous_page)
+                    )
+                }
             }
+
             OutlinedTextField(
                 value = currentPage.toString(), onValueChange = { input ->
                     val newPage = input.toIntOrNull()
@@ -58,14 +59,15 @@ fun Pagination(
                     color = Color.Black
                 )
             )
-            IconButton(
-                onClick = { if (currentPage < totalPages) onPageChange(currentPage + 1) },
-                enabled = currentPage < totalPages
-            ) {
-                Image(
-                    painter = painterResource(id = R.drawable.ic_next_arrow),
-                    contentDescription = stringResource(R.string.next_page)
-                )
+            if (currentPage < totalPages) {
+                IconButton(
+                    onClick = { onPageChange(currentPage + 1) }
+                ) {
+                    Image(
+                        painter = painterResource(id = R.drawable.ic_next_arrow),
+                        contentDescription = stringResource(R.string.next_page)
+                    )
+                }
             }
         }
     }

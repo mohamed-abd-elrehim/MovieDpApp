@@ -1,4 +1,5 @@
 package com.example.banquemisrchallenge05movieapp.listscreen.view
+
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -25,12 +26,16 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NavHostController
 import com.example.banquemisrchallenge05movieapp.listscreen.viewModel.ListScreenViewModel
 import com.example.banquemisrchallenge05movieapp.ui.theme.PrimaryColor
 import com.example.banquemisrchallenge05movieapp.utils.constants.NavigationKeys
 import com.example.banquemisrchallenge05movieapp.listscreen.components.ApiCallState
+import com.example.banquemisrchallenge05movieapp.listscreen.components.Pagination
+import com.example.banquemisrchallenge05movieapp.utils.shared_components.Gap
+
 @Composable
-fun ListScreen(viewModel: ListScreenViewModel) {
+fun ListScreen(navController: NavHostController, viewModel: ListScreenViewModel) {
     var selectedTabIndex by remember { mutableIntStateOf(0) }
     val tabs = listOf(NavigationKeys.NowPlaying, NavigationKeys.Popular, NavigationKeys.Upcoming)
 
@@ -92,7 +97,7 @@ fun ListScreen(viewModel: ListScreenViewModel) {
                     },
                     onClick = {
                         selectedTabIndex =
-                            index // Notify the parent to update the selected tab index
+                            index
                     },
                     selected = selectedTabIndex == index,
                     modifier = Modifier
@@ -104,40 +109,41 @@ fun ListScreen(viewModel: ListScreenViewModel) {
                 )
             }
         }
+        Gap(8)
+        Pagination(
+            currentPage = currentPage,
+            totalPages = totalPages,
+            onPageChange = {
+                currentPage = it
+            })
 
         // Content based on selected tab
         when (selectedTabIndex) {
+
             0 -> {
+
+                // API Call State
                 ApiCallState(
-                    "Now Playing Content",
-                    nowPlayingList,
-                    currentPage,
-                    totalPages,
-                    onPageChange = {
-                        currentPage = it
-                    })
+                    navController = navController,
+                    nowPlayingList
+                )
+
 
             }
+
+
             1 -> {
                 ApiCallState(
-                    "Popular Content",
-                    popularList,
-                    currentPage,
-                    totalPages,
-                    onPageChange = {
-                        currentPage = it
-                    })
+                    navController,
+                    popularList
+                )
             }
 
             2 -> {
                 ApiCallState(
-                    "Upcoming Content",
-                    upcomingList,
-                    currentPage,
-                    totalPages,
-                    onPageChange = {
-                        currentPage = it
-                    })
+                    navController,
+                    upcomingList
+                )
 
             }
         }

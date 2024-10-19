@@ -1,15 +1,15 @@
 package com.example.banquemisrchallenge05movieapp.listscreen.components
 
-import android.util.Log
 import android.widget.Toast
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
+import androidx.navigation.NavController
 import com.example.banquemisrchallenge05movieapp.utils.shared_components.MovieAppLoadingIndicator
 import com.example.banquemisrchallenge05movieapp.utils.shared_models.ApiState
 
 
 @Composable
-fun <T> ApiCallState(title: String, apiState: ApiState<T>,currentPage:Int,totalPages:Int,onPageChange: (Int) -> Unit) {
+fun <T> ApiCallState(navController: NavController, apiState: ApiState<T>) {
     val context=LocalContext.current
     val TAG="ApiCallState"
 
@@ -19,12 +19,8 @@ fun <T> ApiCallState(title: String, apiState: ApiState<T>,currentPage:Int,totalP
         }
 
         is ApiState.Success -> {
-            Log.d(TAG, "Success $title")
-            ListContent( apiState.data,currentPage,totalPages , onPageChange ={
-                onPageChange(it)
+            ListContent(navController,apiState.data)
 
-
-            })
         }
 
         is ApiState.Error -> {
