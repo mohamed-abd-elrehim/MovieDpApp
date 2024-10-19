@@ -1,6 +1,5 @@
 package com.example.banquemisrchallenge05movieapp.utils.data_layer.remote
 
-import com.example.banquemisrchallenge05movieapp.utils.data_layer.local.LocalDataSource
 import com.example.banquemisrchallenge05movieapp.utils.data_layer.remote.moviedb.MoviedbAPIServices
 import com.example.banquemisrchallenge05movieapp.utils.data_layer.remote.moviedb.MoviedbRetrofitHelper
 import com.example.banquemisrchallenge05movieapp.utils.shared_models.MovieDbResultNowPlaying
@@ -11,7 +10,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 
 
-class RemoteDataSourceImpl private constructor() : RemoteDataSource,LocalDataSource {
+class RemoteDataSourceImpl private constructor() : RemoteDataSource {
 
     private val apiService: MoviedbAPIServices = MoviedbRetrofitHelper.api
 
@@ -50,5 +49,7 @@ class RemoteDataSourceImpl private constructor() : RemoteDataSource,LocalDataSou
     override suspend fun fetchMovieDetails(movieId: Int): Flow<MovieDetails> {
         return flowOf( apiService.fetchMovieDetails(movieId))
     }
+
+
 
 }

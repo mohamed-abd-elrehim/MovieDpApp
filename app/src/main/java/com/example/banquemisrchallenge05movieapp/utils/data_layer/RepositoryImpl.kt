@@ -59,4 +59,36 @@ class RepositoryImpl private constructor(
         return  moviesRemoteDataSource.fetchMovieDetails(movieId)
     }
 
+    override suspend fun insertMovieDbResultPopular(movie: MovieDbResultPopular) {
+        moviesLocalDataSource.insertMovieDbResultPopular(movie)
+    }
+
+    override suspend fun insertMovieDbResultUpcoming(movie: MovieDbResultUpcoming) {
+        moviesLocalDataSource.insertMovieDbResultUpcoming(movie)
+    }
+
+    override suspend fun insertMovieDbResultNowPlaying(movie: MovieDbResultNowPlaying) {
+        moviesLocalDataSource.insertMovieDbResultNowPlaying(movie)
+    }
+
+    override suspend fun insertMovieDetails(movie: MovieDetails) {
+        moviesLocalDataSource.insertMovieDetails(movie)
+    }
+
+    override suspend fun getPopularMovies(page: Int): MovieDbResultPopular? {
+        return moviesLocalDataSource.getPopularMovies(page)
+    }
+
+    override suspend fun getUpcomingMovies(page: Int): MovieDbResultUpcoming? {
+        return moviesLocalDataSource.getUpcomingMovies(page)
+    }
+
+    override suspend fun getNowPlayingMovies(page: Int): MovieDbResultNowPlaying? {
+       return moviesLocalDataSource.getNowPlayingMovies(page)
+    }
+
+    override suspend fun getMovieDetails(movieId: Int): MovieDetails? {
+        return moviesLocalDataSource.getMovieDetails(movieId)
+    }
+
 }
