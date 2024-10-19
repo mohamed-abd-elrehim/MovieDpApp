@@ -3,6 +3,7 @@ package com.example.banquemisrchallenge05movieapp.startscreen.view
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.navigation.compose.NavHost
@@ -12,6 +13,7 @@ import com.example.banquemisrchallenge05movieapp.detailscreen.view.DetailScreen
 import com.example.banquemisrchallenge05movieapp.detailscreen.viewModel.DetailScreenViewModelFactory
 import com.example.banquemisrchallenge05movieapp.listscreen.viewModel.ListScreenViewModelFactory
 import com.example.banquemisrchallenge05movieapp.mainhome.view.MainHomeScreen
+import com.example.banquemisrchallenge05movieapp.startscreen.components.SplashLottie
 import com.example.banquemisrchallenge05movieapp.utils.data_layer.RepositoryImpl
 import com.example.banquemisrchallenge05movieapp.utils.data_layer.local.LocalDataSourceImpl
 import com.example.banquemisrchallenge05movieapp.utils.data_layer.remote.RemoteDataSourceImpl
@@ -40,8 +42,10 @@ class MainActivity : ComponentActivity() {
                 Surface {
                     val navController = rememberNavController()
 
-                  NavHost(navController, startDestination = Screen.ListScreen.route) {
-                        composable(Screen.ListScreen.route) {
+                  NavHost(navController, startDestination = Screen.SplashScreen.route) {
+                          composable(Screen.SplashScreen.route) { SplashLottie(navController) }
+
+                          composable(Screen.ListScreen.route) {
                             MainHomeScreen(
                                 listScreenViewModelFactory,
                                 detailScreenViewModelFactory,
