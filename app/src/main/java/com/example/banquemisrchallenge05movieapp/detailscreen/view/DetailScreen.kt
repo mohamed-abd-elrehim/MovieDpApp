@@ -1,20 +1,22 @@
 package com.example.banquemisrchallenge05movieapp.detailscreen.view
 
 import android.widget.Toast
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -22,16 +24,19 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
+import com.example.banquemisrchallenge05movieapp.R
 import com.example.banquemisrchallenge05movieapp.detailscreen.viewModel.DetailViewModel
+import com.example.banquemisrchallenge05movieapp.ui.theme.PrimaryColor
 import com.example.banquemisrchallenge05movieapp.utils.constants.APIKeys
+import com.example.banquemisrchallenge05movieapp.utils.shared_components.BackButton
 import com.example.banquemisrchallenge05movieapp.utils.shared_components.Gap
+import com.example.banquemisrchallenge05movieapp.utils.shared_components.HeaderText
 import com.example.banquemisrchallenge05movieapp.utils.shared_components.MovieAppLoadingIndicator
-import com.example.banquemisrchallenge05movieapp.utils.shared_components.SharedHeader
 import com.example.banquemisrchallenge05movieapp.utils.shared_methods.LoadAsyncImage
 import com.example.banquemisrchallenge05movieapp.utils.shared_models.ApiState
 import com.example.banquemisrchallenge05movieapp.utils.shared_models.MovieDetails
 
-
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun DetailScreen(navController: NavHostController, viewModel: DetailViewModel, movieId: Int) {
     val context = LocalContext.current
@@ -41,6 +46,7 @@ fun DetailScreen(navController: NavHostController, viewModel: DetailViewModel, m
     }
 
     val movieDetails by viewModel.movieDetails.collectAsStateWithLifecycle()
+    val scrollState = rememberLazyListState()
 
     when (movieDetails) {
         ApiState.Loading -> {
@@ -50,129 +56,187 @@ fun DetailScreen(navController: NavHostController, viewModel: DetailViewModel, m
         is ApiState.Success -> {
             val movie = (movieDetails as ApiState.Success<MovieDetails>).data
 
-            Column(
-                modifier = Modifier
-                    .padding(top = 20.dp)
-                    .fillMaxSize()
-                    .verticalScroll(rememberScrollState())
+            // Scrollable content with Sticky Header
+            LazyColumn(
+                state = scrollState,
+                modifier = Modifier.fillMaxSize()
             ) {
-                SharedHeader(navController, "Movie Details")
-                Gap(16)
-                Column(
-                    modifier = Modifier
-                        .padding(16.dp, 16.dp, 16.dp, 25.dp)
-                ) {
 
-                    LoadAsyncImage(
-                        context = context,
-                        imageUrl = APIKeys.MOVIEDB_IMAGE_URL + movie.backdrop_path,
-                        movie.title,
+                item {
+                    Text(
+                        text = stringResource(R.string.app_name),
+                        fontSize = 24.sp,
+                        color = PrimaryColor,
+                        fontStyle = FontStyle.Italic,
                         modifier = Modifier
                             .fillMaxWidth()
-                            .height(200.dp)
-                            .clip(RoundedCornerShape(8.dp))
-                    )
-
-
-                    Gap(height = 16)
-
-                    Text(
-                        text = movie.title,
-                        style = MaterialTheme.typography.headlineSmall,
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 24.sp,
-                        modifier = Modifier.fillMaxWidth(),
+                            .padding(16.dp),
                         textAlign = TextAlign.Center
                     )
+                }
+                // Sticky Header for Back Button
+                stickyHeader {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .background(Color.White),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        // Back Button
+                        Row(
+                            horizontalArrangement = Arrangement.Start,
+                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            BackButton(onBackClick = {
+                                navController.popBackStack()
+                            })
+                            Gap(width = 20)
+                            HeaderText(headerText = stringResource(R.string.movie_details))
+                        }
+                    }
+                }
 
-                    Gap(height = 8)
+                // Scrollable Movie Details content
+                item {
+                    Column(
+                        modifier = Modifier
+                            .padding(16.dp)
+                            .fillMaxSize()
+                    ) {
+                        LoadAsyncImage(
+                            context = context,
+                            imageUrl = APIKeys.MOVIEDB_IMAGE_URL + movie.backdrop_path,
+                            movie.title,
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .clip(RoundedCornerShape(8.dp)),
+                            contentScale = ContentScale.Crop
+                        )
 
-                    movie.tagline?.let {
+                        Gap(height = 16)
+
                         Text(
-                            text = it,
-                            style = MaterialTheme.typography.bodyMedium,
-                            fontStyle = FontStyle.Italic,
-                            color = Color.Gray,
-                            textAlign = TextAlign.Center,
+                            text = movie.title,
+                            style = MaterialTheme.typography.headlineSmall,
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 24.sp,
+                            modifier = Modifier.fillMaxWidth(),
+                            textAlign = TextAlign.Center
+                        )
+
+                        Gap(height = 8)
+
+                        movie.tagline?.let {
+                            Text(
+                                text = it,
+                                style = MaterialTheme.typography.bodyMedium,
+                                fontStyle = FontStyle.Italic,
+                                color = Color.Gray,
+                                textAlign = TextAlign.Center,
+                                modifier = Modifier.fillMaxWidth()
+                            )
+                        }
+
+                        Gap(height = 16)
+
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.Start
+                        ) {
+
+                            LoadAsyncImage(
+                                context = context,
+                                imageUrl = APIKeys.MOVIEDB_IMAGE_URL + movie.poster_path,
+                                movie.title,
+                                modifier = Modifier
+                                    .width(150.dp)
+                                    .fillMaxHeight()
+                                    .clip(RoundedCornerShape(8.dp)),
+                                contentScale = ContentScale.None
+                            )
+
+                            Gap(width = 16)
+
+                            Column(
+                                modifier = Modifier.align(Alignment.CenterVertically)
+                            ) {
+                                Text(text = "Release Date: ${movie.release_date}", fontSize = 16.sp)
+                                if(movie.vote_average>0.0) {
+                                    Text(
+                                        text = "Rating: ${
+                                            String.format(
+                                                "%.2f",
+                                                movie.vote_average
+                                            )
+                                        }/10",
+                                        fontSize = 16.sp
+                                    )
+                                }
+                                Text(text = "Runtime: ${movie.runtime} min", fontSize = 16.sp)
+                              if (movie.budget > 0) {
+                                  Text(
+                                      text = "Budget: \$${movie.budget / 1_000_000}M",
+                                      fontSize = 16.sp
+                                  )
+                              }
+                                if (movie.revenue > 0) {
+
+                                    Text(
+                                        text = "Revenue: \$${movie.revenue / 1_000_000}M",
+                                        fontSize = 16.sp
+                                    )
+                                }
+                            }
+                        }
+
+                        Gap(height = 16)
+
+                        Text(
+                            text = "Genres: ${movie.genres.map { it.name }.joinToString(", ")}",
+                            fontSize = 16.sp,
+                            color = Color.Gray
+                        )
+
+                        Gap(height = 16)
+
+                        Text(
+                            text = "Overview:",
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 18.sp,
+                            modifier = Modifier.fillMaxWidth()
+                        )
+
+                        Text(
+                            text = movie.overview,
+                            fontSize = 16.sp,
+                            textAlign = TextAlign.Justify,
+                            modifier = Modifier.fillMaxWidth()
+                        )
+
+                        Gap(height = 16)
+
+                        Text(
+                            text = "Production Companies:",
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 18.sp,
+                            modifier = Modifier.fillMaxWidth()
+                        )
+
+                        Text(
+                            text = movie.production_companies.map { it.name }.joinToString(", "),
+                            fontSize = 16.sp,
+                            textAlign = TextAlign.Left,
                             modifier = Modifier.fillMaxWidth()
                         )
                     }
-
-                    Gap(height = 16)
-
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.Start
-                    ) {
-
-                        LoadAsyncImage(
-                            context = context,
-                            imageUrl = APIKeys.MOVIEDB_IMAGE_URL + movie.poster_path,
-                            movie.title,
-                            modifier = Modifier
-                                .size(150.dp)
-                                .clip(RoundedCornerShape(8.dp))
-                        )
-
-                        Gap(width = 16)
-
-                        Column(
-                            modifier = Modifier.align(Alignment.CenterVertically)
-                        ) {
-                            Text(text = "Release Date: ${movie.release_date}", fontSize = 16.sp)
-                            Text(text = "Rating: ${String.format("%.2f", movie.vote_average)}/10", fontSize = 16.sp)
-                            Text(text = "Runtime: ${movie.runtime} min", fontSize = 16.sp)
-                            Text(text = "Budget: \$${movie.budget / 1_000_000}M", fontSize = 16.sp)
-                            Text(text = "Revenue: \$${movie.revenue / 1_000_000}M", fontSize = 16.sp)
-                        }
-                    }
-
-                    Gap(height = 16)
-
-                    Text(
-                        text = "Genres: ${movie.genres.map { it.name }.joinToString(", ")}",
-                        fontSize = 16.sp,
-                        color = Color.Gray
-                    )
-
-                    Gap(height = 16)
-
-                    Text(
-                        text = "Overview:",
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 18.sp,
-                        modifier = Modifier.fillMaxWidth()
-                    )
-
-                    Text(
-                        text = movie.overview,
-                        fontSize = 16.sp,
-                        textAlign = TextAlign.Justify,
-                        modifier = Modifier.fillMaxWidth()
-                    )
-
-                    Gap(height = 16)
-
-                    Text(
-                        text = "Production Companies:",
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 18.sp,
-                        modifier = Modifier.fillMaxWidth()
-                    )
-
-                    Text(
-
-                        text = movie.production_companies.map { it.name }.joinToString(", "),
-                        fontSize = 16.sp,
-                        textAlign = TextAlign.Left,
-                        modifier = Modifier.fillMaxWidth()
-                    )
                 }
             }
         }
 
         is ApiState.Error -> {
-            Toast.makeText(context, (movieDetails as ApiState.Error).message, Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, (movieDetails as ApiState.Error).message, Toast.LENGTH_SHORT)
+                .show()
         }
     }
 }

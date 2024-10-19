@@ -81,7 +81,11 @@ fun ListScreen(navController: NavHostController, viewModel: ListScreenViewModel)
         TabRow(
             selectedTabIndex = selectedTabIndex,
             modifier = Modifier
-                .background(Color.White)
+                .padding(horizontal = 8.dp)
+                .clip(MaterialTheme.shapes.medium)
+                .background(Color.White),
+            indicator = {},
+            divider = {}
         ) {
             tabs.forEachIndexed { index, title ->
                 val scale by animateFloatAsState(
