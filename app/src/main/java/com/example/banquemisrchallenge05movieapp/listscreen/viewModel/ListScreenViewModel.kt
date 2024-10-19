@@ -80,15 +80,6 @@ class ListScreenViewModel(private val repository: Repository) : BaseViewModel() 
             repository.getNowPlayingMovies(page)
         }
     }
-    /*
 
-        fun getMovieDetails(movieId: Int): MovieDetails? {
-            return movieDao.getMovieDetails(movieId)
-        }
-
-        fun insertMovieDetails(movie: MovieDetails) {
-            movieDao.insertMovieDetails(movie)
-        }
-    */
 
 }

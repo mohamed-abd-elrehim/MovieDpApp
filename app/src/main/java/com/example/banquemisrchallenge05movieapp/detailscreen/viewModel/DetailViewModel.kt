@@ -5,9 +5,6 @@ import androidx.lifecycle.viewModelScope
 import com.example.banquemisrchallenge05movieapp.R
 import com.example.banquemisrchallenge05movieapp.utils.data_layer.Repository
 import com.example.banquemisrchallenge05movieapp.utils.shared_models.ApiState
-import com.example.banquemisrchallenge05movieapp.utils.shared_models.MovieDbResultNowPlaying
-import com.example.banquemisrchallenge05movieapp.utils.shared_models.MovieDbResultPopular
-import com.example.banquemisrchallenge05movieapp.utils.shared_models.MovieDbResultUpcoming
 import com.example.banquemisrchallenge05movieapp.utils.shared_models.MovieDetails
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
@@ -22,6 +19,9 @@ class DetailViewModel(private val repository: Repository) : ViewModel() {
 
     private val _movieDetails = MutableStateFlow<ApiState<MovieDetails>>(ApiState.Loading)
     val movieDetails = _movieDetails.asStateFlow()
+
+    private val _localMovieDetails = MutableStateFlow<MovieDetails?>(null)
+    val localMovieDetails = _localMovieDetails.asStateFlow()
 
     private val _isRefreshing = MutableStateFlow(false)
     val isRefreshing = _isRefreshing.asStateFlow()
@@ -57,5 +57,24 @@ class DetailViewModel(private val repository: Repository) : ViewModel() {
     }
 
 
+    fun insertMovieDetails(movie: MovieDetails) {
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.insertMovieDetails(movie)
+        }
+    }
+
+    fun getMovieDetails(movieId: Int) {
+        viewModelScope.launch(Dispatchers.IO) {
+
+            repository.getMovieDetails(movieId).collect {
+                if (it != null) {
+                    _localMovieDetails.value = it
+                }
+
+            }
+        }
+
+
+    }
 }
 

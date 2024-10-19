@@ -75,19 +75,19 @@ class RepositoryImpl private constructor(
         moviesLocalDataSource.insertMovieDetails(movie)
     }
 
-    override suspend fun getPopularMovies(page: Int): MovieDbResultPopular? {
+    override  fun getPopularMovies(page: Int):  Flow<MovieDbResultPopular?> {
         return moviesLocalDataSource.getPopularMovies(page)
     }
 
-    override suspend fun getUpcomingMovies(page: Int): MovieDbResultUpcoming? {
+    override  fun getUpcomingMovies(page: Int):  Flow<MovieDbResultUpcoming?> {
         return moviesLocalDataSource.getUpcomingMovies(page)
     }
 
-    override suspend fun getNowPlayingMovies(page: Int): MovieDbResultNowPlaying? {
+    override  fun getNowPlayingMovies(page: Int):  Flow<MovieDbResultNowPlaying?> {
        return moviesLocalDataSource.getNowPlayingMovies(page)
     }
 
-    override suspend fun getMovieDetails(movieId: Int): MovieDetails? {
+    override  fun getMovieDetails(movieId: Int):  Flow<MovieDetails?> {
         return moviesLocalDataSource.getMovieDetails(movieId)
     }
 

@@ -7,6 +7,7 @@ import com.example.banquemisrchallenge05movieapp.utils.shared_models.MovieDbResu
 import com.example.banquemisrchallenge05movieapp.utils.shared_models.MovieDbResultPopular
 import com.example.banquemisrchallenge05movieapp.utils.shared_models.MovieDbResultUpcoming
 import com.example.banquemisrchallenge05movieapp.utils.shared_models.MovieDetails
+import kotlinx.coroutines.flow.Flow
 
 
 interface LocalDataSource {
@@ -16,10 +17,10 @@ interface LocalDataSource {
     suspend fun insertMovieDbResultNowPlaying(movie: MovieDbResultNowPlaying)
     suspend fun insertMovieDetails(movie: MovieDetails)
 
-    suspend fun getPopularMovies(page: Int): MovieDbResultPopular?
-    suspend fun getUpcomingMovies(page: Int): MovieDbResultUpcoming?
-    suspend fun getNowPlayingMovies(page: Int): MovieDbResultNowPlaying?
-    suspend fun getMovieDetails(movieId: Int): MovieDetails?
+     fun getPopularMovies(page: Int): Flow<MovieDbResultPopular?>
+     fun getUpcomingMovies(page: Int): Flow<MovieDbResultUpcoming?>
+     fun getNowPlayingMovies(page: Int): Flow<MovieDbResultNowPlaying?>
+     fun getMovieDetails(movieId: Int): Flow<MovieDetails?>
 
 }
 

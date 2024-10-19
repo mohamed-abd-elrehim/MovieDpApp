@@ -7,6 +7,7 @@ import com.example.banquemisrchallenge05movieapp.utils.shared_models.MovieDbResu
 import com.example.banquemisrchallenge05movieapp.utils.shared_models.MovieDbResultPopular
 import com.example.banquemisrchallenge05movieapp.utils.shared_models.MovieDbResultUpcoming
 import com.example.banquemisrchallenge05movieapp.utils.shared_models.MovieDetails
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface MovieDao {
@@ -23,14 +24,16 @@ interface MovieDao {
     suspend fun insertMovieDetails(movie: MovieDetails)
 
     @Query("SELECT * FROM movie_db_result_popular WHERE page = :page")
-    suspend fun getPopularMovies(page: Int): MovieDbResultPopular?
+     fun getPopularMovies(page: Int): Flow<MovieDbResultPopular?>
 
     @Query("SELECT * FROM movie_db_result_upcoming WHERE page = :page")
-    suspend fun getUpcomingMovies(page: Int): MovieDbResultUpcoming?
+     fun getUpcomingMovies(page: Int): Flow<MovieDbResultUpcoming?>
 
     @Query("SELECT * FROM movie_db_result_now_playing WHERE page = :page")
-    suspend fun getNowPlayingMovies(page: Int): MovieDbResultNowPlaying?
+     fun getNowPlayingMovies(page: Int): Flow<MovieDbResultNowPlaying?>
 
     @Query("SELECT * FROM movie_details WHERE id = :movieId")
-    suspend fun getMovieDetails(movieId: Int): MovieDetails?
+    fun getMovieDetails(movieId: Int): Flow<MovieDetails?>
+
+
 }

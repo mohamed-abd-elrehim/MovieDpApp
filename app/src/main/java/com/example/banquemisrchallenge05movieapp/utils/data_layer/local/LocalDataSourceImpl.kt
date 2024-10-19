@@ -6,6 +6,7 @@ import com.example.banquemisrchallenge05movieapp.utils.shared_models.MovieDbResu
 import com.example.banquemisrchallenge05movieapp.utils.shared_models.MovieDbResultPopular
 import com.example.banquemisrchallenge05movieapp.utils.shared_models.MovieDbResultUpcoming
 import com.example.banquemisrchallenge05movieapp.utils.shared_models.MovieDetails
+import kotlinx.coroutines.flow.Flow
 
 
 class LocalDataSourceImpl private constructor(context: Context) : LocalDataSource {
@@ -40,20 +41,20 @@ class LocalDataSourceImpl private constructor(context: Context) : LocalDataSourc
         movieDao.insertMovieDetails(movie)
     }
 
-    override suspend fun getPopularMovies(page: Int): MovieDbResultPopular? {
+    override fun getPopularMovies(page: Int): Flow<MovieDbResultPopular?> {
         return movieDao.getPopularMovies(page)
     }
 
-    override suspend fun getUpcomingMovies(page: Int): MovieDbResultUpcoming? {
+    override fun getUpcomingMovies(page: Int): Flow<MovieDbResultUpcoming?> {
         return movieDao.getUpcomingMovies(page)
     }
 
-    override suspend fun getNowPlayingMovies(page: Int): MovieDbResultNowPlaying? {
+    override fun getNowPlayingMovies(page: Int): Flow<MovieDbResultNowPlaying?> {
         return movieDao.getNowPlayingMovies(page)
     }
 
-    override suspend fun getMovieDetails(movieId: Int): MovieDetails? {
-       return movieDao.getMovieDetails(movieId)
+    override fun getMovieDetails(movieId: Int): Flow<MovieDetails?> {
+        return movieDao.getMovieDetails(movieId)
     }
 
 }
