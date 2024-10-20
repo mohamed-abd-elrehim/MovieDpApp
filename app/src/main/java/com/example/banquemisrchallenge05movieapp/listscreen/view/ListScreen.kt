@@ -1,6 +1,7 @@
 package com.example.banquemisrchallenge05movieapp.listscreen.view
 
 import android.util.Log
+import androidx.compose.animation.Crossfade
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -58,12 +59,11 @@ fun ListScreen(navController: NavHostController, viewModel: ListScreenViewModel)
     viewModel.getLocalMoviesIfAvailable(selectedTabIndex,currentPage)
 
 
+
     // Fetch remote movies if no local movies are available
     if (isNetworkAvailable(context)) {
         LaunchedEffect( currentPage) {
-
             viewModel.fetchRemoteMoviesIfLocalIsEmpty(selectedTabIndex, currentPage)
-
         }
     }
 
@@ -124,34 +124,35 @@ fun ListScreen(navController: NavHostController, viewModel: ListScreenViewModel)
         )
         val isNetworkAvailable = isNetworkAvailable(context)
 
-        // Handle content based on selected tab
-        when (selectedTabIndex) {
-            0 -> handleMovieContent(
-                navController,
-                localNowPlayingMovies,
-                nowPlayingList,
-                isNetworkAvailable(context)
-            ) {
-                viewModel.insertMovieDbResultNowPlaying(it)
-            }
+        Crossfade(targetState = selectedTabIndex) { currentTab ->
+            when (currentTab) {
+                0 -> handleMovieContent(
+                    navController,
+                    localNowPlayingMovies,
+                    nowPlayingList,
+                    isNetworkAvailable(context)
+                ) {
+                    viewModel.insertMovieDbResultNowPlaying(it)
+                }
 
-            1 -> handleMovieContent(
-                navController,
-                localPopularMovies,
-                popularList,
-                isNetworkAvailable(context)
-            ) {
-                viewModel.insertMovieDbResultPopular(it)
-            }
+                1 -> handleMovieContent(
+                    navController,
+                    localPopularMovies,
+                    popularList,
+                    isNetworkAvailable(context)
+                ) {
+                    viewModel.insertMovieDbResultPopular(it)
+                }
 
-            2 -> handleMovieContent(
-                navController,
-                localUpcomingMovies,
-                upcomingList,
-                isNetworkAvailable(context)
+                2 -> handleMovieContent(
+                    navController,
+                    localUpcomingMovies,
+                    upcomingList,
+                    isNetworkAvailable(context)
 
-            ) {
-                viewModel.insertMovieDbResultUpcoming(it)
+                ) {
+                    viewModel.insertMovieDbResultUpcoming(it)
+                }
             }
         }
     }

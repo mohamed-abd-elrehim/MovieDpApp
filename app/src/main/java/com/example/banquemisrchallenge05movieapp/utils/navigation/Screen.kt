@@ -28,14 +28,13 @@ sealed class Screen(val route: String, val title: Int) {
     @Composable
     fun AppNavigation(
         navController: NavHostController,
-        listScreenViewModelFactory: ListScreenViewModelFactory,
-        detailScreenViewModelFactory: DetailScreenViewModelFactory
+        listScreenViewModel: ListScreenViewModel,
+        detailScreenViewModel: DetailViewModel
     ){
 
         NavHost(navController, startDestination = Screen.ListScreen.route) {
             composable(route = Screen.ListScreen.route) {
-                val viewModel: ListScreenViewModel = viewModel(factory =listScreenViewModelFactory)
-                ListScreen(navController,viewModel)
+                ListScreen(navController,listScreenViewModel)
             }
 
 
@@ -46,10 +45,8 @@ sealed class Screen(val route: String, val title: Int) {
                 // Get the movieId from the arguments
                 val movieId = backStackEntry.arguments?.getInt("movieId")
 
-                val viewModel: DetailViewModel = viewModel(factory = detailScreenViewModelFactory)
-
                 if (movieId != null) {
-                    DetailScreen(navController, viewModel = viewModel,movieId = movieId)
+                    DetailScreen(navController, viewModel = detailScreenViewModel,movieId = movieId)
                 }
             }
 

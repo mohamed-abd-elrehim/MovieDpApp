@@ -8,14 +8,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.navigation.compose.rememberNavController
 import com.example.banquemisrchallenge05movieapp.detailscreen.viewModel.DetailScreenViewModelFactory
+import com.example.banquemisrchallenge05movieapp.detailscreen.viewModel.DetailViewModel
+import com.example.banquemisrchallenge05movieapp.listscreen.viewModel.ListScreenViewModel
 import com.example.banquemisrchallenge05movieapp.listscreen.viewModel.ListScreenViewModelFactory
 import com.example.banquemisrchallenge05movieapp.utils.navigation.Screen.DetailScreen.AppNavigation
 
 
 @Composable
 fun MainHomeScreen(
-    listScreenViewModelFactory: ListScreenViewModelFactory,
-    detailScreenViewModelFactory: DetailScreenViewModelFactory
+    listScreenViewModel: ListScreenViewModel,
+    detailScreenViewModel: DetailViewModel
 
 ) {
 
@@ -29,8 +31,8 @@ fun MainHomeScreen(
         Box(modifier = Modifier.padding(paddingValues)) {
             AppNavigation(
                 navController = navController,
-                listScreenViewModelFactory = listScreenViewModelFactory,
-                detailScreenViewModelFactory = detailScreenViewModelFactory
+                listScreenViewModel = listScreenViewModel,
+                detailScreenViewModel = detailScreenViewModel
             )
 
         }

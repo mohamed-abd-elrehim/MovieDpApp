@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     id ("kotlin-kapt")
+
 }
 
 android {
@@ -15,7 +16,6 @@ android {
         targetSdk = 35
         versionCode = 1
         versionName = "1.0"
-
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -58,7 +58,9 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
-
+    // Koin for Android
+    implementation ("io.insert-koin:koin-androidx-compose: 3.4.3")
+    implementation("io.insert-koin:koin-androidx-compose:3.4.3")
 
 
     //Coil for images
