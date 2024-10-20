@@ -25,7 +25,6 @@ fun <T> ListContent(
         is MovieDbResultUpcoming -> list.results
         else -> emptyList()
     }
-    Log.d(TAG, "ListContent: $result")
     Column {
         LazyHorizontalGrid(rows = GridCells.Fixed(2),
             content = {

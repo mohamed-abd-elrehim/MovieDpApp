@@ -1,5 +1,8 @@
 package com.example.banquemisrchallenge05movieapp.listscreen.viewModel
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewModelScope
 import com.example.banquemisrchallenge05movieapp.utils.shared_viewmodel.BaseViewModel
 import com.example.banquemisrchallenge05movieapp.utils.data_layer.Repository
@@ -24,7 +27,6 @@ class ListScreenViewModel(private val repository: Repository) : BaseViewModel() 
     val popularList = _popularList.asStateFlow()
 
 
-
     private val _localUpcomingList = MutableStateFlow<MovieDbResultUpcoming?>(null)
     val localUpcomingList = _localUpcomingList.asStateFlow()
 
@@ -37,6 +39,13 @@ class ListScreenViewModel(private val repository: Repository) : BaseViewModel() 
 
     private val _totalPages = MutableStateFlow<Int>(0)
     val totalPages = _totalPages.asStateFlow()
+
+    private var _currentPage = MutableStateFlow<Int>(1)
+    val currentPage = _currentPage.asStateFlow()
+
+    fun setCurrentPage(page: Int) {
+        _currentPage.value = page
+    }
 
     fun fetchNowPlayingList(page: Int) {
         handleFetchList(
@@ -74,32 +83,32 @@ class ListScreenViewModel(private val repository: Repository) : BaseViewModel() 
     }
 
 
-    fun getPopularMovies(page: Int)  {
+    fun getPopularMovies(page: Int) {
         viewModelScope.launch(Dispatchers.IO) {
-             repository.getPopularMovies(page).collect{
-                 _localPopularList.value = it
-                 if (it != null) {
-                     _totalPages.value = it.total_pages
-                 }
-             }
+            repository.getPopularMovies(page).collect {
+                _localPopularList.value = it
+                if (it != null) {
+                    _totalPages.value = it.total_pages
+                }
+            }
         }
 
     }
 
     fun getUpcomingMovies(page: Int) {
         viewModelScope.launch(Dispatchers.IO) {
-             repository.getUpcomingMovies(page).collect{
-                 _localUpcomingList.value = it
-                 if (it != null) {
-                     _totalPages.value = it.total_pages
-                 }
-             }
+            repository.getUpcomingMovies(page).collect {
+                _localUpcomingList.value = it
+                if (it != null) {
+                    _totalPages.value = it.total_pages
+                }
+            }
         }
     }
 
-    fun getNowPlayingMovies(page: Int){
+    fun getNowPlayingMovies(page: Int) {
         viewModelScope.launch(Dispatchers.IO) {
-            repository.getNowPlayingMovies(page).collect{
+            repository.getNowPlayingMovies(page).collect {
                 _localNowPlayingList.value = it
                 if (it != null) {
                     _totalPages.value = it.total_pages
@@ -109,4 +118,48 @@ class ListScreenViewModel(private val repository: Repository) : BaseViewModel() 
     }
 
 
+    fun getLocalMoviesIfAvailable(selectedTabIndex: Int, currentPage: Int) {
+        when (selectedTabIndex) {
+            0 -> {
+                getNowPlayingMovies(currentPage)
+            }
+
+            1 -> {
+                getPopularMovies(currentPage)
+            }
+
+            2 -> {
+                getUpcomingMovies(currentPage)
+            }
+        }
+    }
+
+
+    fun fetchRemoteMoviesIfLocalIsEmpty(selectedTabIndex: Int, currentPage: Int) {
+        when (selectedTabIndex) {
+            0 -> {
+                if (_localNowPlayingList.value == null) {
+                    fetchNowPlayingList(currentPage)
+                }
+            }
+
+            1 -> {
+                if (_localPopularList.value == null) {
+                    fetchPopularList(currentPage)
+                }
+
+            }
+
+            2 -> {
+                if (_localUpcomingList.value == null) {
+                    fetchUpcomingList(currentPage)
+                }
+            }
+        }
+    }
+
+
+
+
 }
+

@@ -3,13 +3,12 @@ package com.example.banquemisrchallenge05movieapp.startscreen.view
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.viewModels
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.banquemisrchallenge05movieapp.detailscreen.view.DetailScreen
 import com.example.banquemisrchallenge05movieapp.detailscreen.viewModel.DetailScreenViewModelFactory
 import com.example.banquemisrchallenge05movieapp.listscreen.viewModel.ListScreenViewModelFactory
 import com.example.banquemisrchallenge05movieapp.mainhome.view.MainHomeScreen
@@ -19,6 +18,8 @@ import com.example.banquemisrchallenge05movieapp.utils.data_layer.local.LocalDat
 import com.example.banquemisrchallenge05movieapp.utils.data_layer.remote.RemoteDataSourceImpl
 import com.example.banquemisrchallenge05movieapp.utils.navigation.Screen
 import com.example.banquemisrchallenge05movieapp.utils.shared_methods.InternetChecker
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 
 class MainActivity : ComponentActivity() {
@@ -41,6 +42,8 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         internetChecker = InternetChecker(this)
         internetChecker.startMonitoring()
+
+
         setContent {
             MaterialTheme {
                 Surface {
@@ -55,16 +58,13 @@ class MainActivity : ComponentActivity() {
                                 detailScreenViewModelFactory,
 
                                 )
-
                         }
-
                     }
-
-
                 }
             }
         }
     }
+
     override fun onDestroy() {
         super.onDestroy()
         internetChecker.stopMonitoring()

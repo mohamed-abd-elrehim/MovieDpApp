@@ -6,9 +6,6 @@ import com.example.banquemisrchallenge05movieapp.utils.shared_models.MovieDbResu
 import com.example.banquemisrchallenge05movieapp.utils.shared_models.MovieDbResultUpcoming
 import com.example.banquemisrchallenge05movieapp.utils.shared_models.MovieDetails
 import kotlinx.coroutines.flow.Flow
-import retrofit2.http.GET
-import retrofit2.http.Path
-import retrofit2.http.Query
 
 
 interface RemoteDataSource {

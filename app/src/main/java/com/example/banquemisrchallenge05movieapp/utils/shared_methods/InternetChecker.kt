@@ -43,12 +43,14 @@ class InternetChecker(private val context: Context) {
         CoroutineScope(Dispatchers.Default).launch {
             _networkStateFlow.emit(isConnected)
         }
+        _networkStateFlow.tryEmit(isConnected)
         // Show a Toast message for online or offline status
         showNetworkStatusToast(isConnected)
     }
 
     private fun showNetworkStatusToast(isConnected: Boolean) {
         val message = if (isConnected) {
+
             "Online Mode"
         } else {
             "Offline Mode"

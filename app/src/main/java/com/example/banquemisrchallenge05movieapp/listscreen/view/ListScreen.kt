@@ -8,7 +8,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.TopAppBar
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
@@ -19,20 +19,28 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NavController
 import androidx.navigation.NavHostController
-import com.example.banquemisrchallenge05movieapp.listscreen.viewModel.ListScreenViewModel
+import com.example.banquemisrchallenge05movieapp.R
 import com.example.banquemisrchallenge05movieapp.ui.theme.PrimaryColor
 import com.example.banquemisrchallenge05movieapp.utils.constants.NavigationKeys
 import com.example.banquemisrchallenge05movieapp.listscreen.components.ApiCallState
 import com.example.banquemisrchallenge05movieapp.listscreen.components.ListContent
 import com.example.banquemisrchallenge05movieapp.listscreen.components.Pagination
+import com.example.banquemisrchallenge05movieapp.listscreen.viewModel.ListScreenViewModel
 import com.example.banquemisrchallenge05movieapp.utils.shared_components.Gap
+import com.example.banquemisrchallenge05movieapp.utils.shared_components.HeaderText
+import com.example.banquemisrchallenge05movieapp.utils.shared_components.LottieWithText
+import com.example.banquemisrchallenge05movieapp.utils.shared_models.ApiState
+import com.example.banquemisrchallenge05movieapp.utils.shared_models.isNetworkAvailable
 
 @Composable
 fun ListScreen(navController: NavHostController, viewModel: ListScreenViewModel) {
+    val context = LocalContext.current
     val nowPlayingList by viewModel.nowPlayingList.collectAsStateWithLifecycle()
     val popularList by viewModel.popularList.collectAsStateWithLifecycle()
     val upcomingList by viewModel.upcomingList.collectAsStateWithLifecycle()
@@ -43,64 +51,36 @@ fun ListScreen(navController: NavHostController, viewModel: ListScreenViewModel)
 
     var selectedTabIndex by remember { mutableIntStateOf(0) }
     val tabs = listOf(NavigationKeys.NowPlaying, NavigationKeys.Popular, NavigationKeys.Upcoming)
-    var currentPage by remember { mutableIntStateOf(1) }
     val totalPages by viewModel.totalPages.collectAsStateWithLifecycle()
+    val currentPage by viewModel.currentPage.collectAsStateWithLifecycle()
 
-    LaunchedEffect(selectedTabIndex, currentPage) {
-        when (selectedTabIndex) {
-            0 -> {
-                viewModel.getNowPlayingMovies(currentPage)
-            }
 
-            1 -> {
-                viewModel.getPopularMovies(currentPage)
-            }
+    viewModel.getLocalMoviesIfAvailable(selectedTabIndex,currentPage)
 
-            2 -> {
-                viewModel.getUpcomingMovies(currentPage)
-            }
+
+    // Fetch remote movies if no local movies are available
+    if (isNetworkAvailable(context)) {
+        LaunchedEffect( currentPage) {
+
+            viewModel.fetchRemoteMoviesIfLocalIsEmpty(selectedTabIndex, currentPage)
+
         }
     }
 
-    LaunchedEffect(selectedTabIndex, currentPage) {
-        when (selectedTabIndex) {
-            0 -> {
-                if (localNowPlayingMovies == null) {
-                    viewModel.fetchNowPlayingList(currentPage)
-                }
-            }
-
-            1 -> {
-                if (localPopularMovies == null) {
-                    viewModel.fetchPopularList(currentPage)
-                }
-
-            }
-
-            2 -> {
-                if (localUpcomingMovies == null) {
-                    viewModel.fetchUpcomingList(currentPage)
-                }
-            }
-        }
-    }
 
     Column(
         modifier = Modifier.background(Color.White)
     ) {
-        TopAppBar(backgroundColor = Color.White, title = {
-            Box(
-                modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    "List Screen",
-                    fontSize = MaterialTheme.typography.titleLarge.fontSize,
-                    color = Color.Black,
-                    textAlign = TextAlign.Center,
-                )
-            }
-        })
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 16.dp),
+            contentAlignment = Alignment.Center
+        ) {
+            HeaderText(headerText = "List Screen")
+        }
 
+        Gap(height = 16)
         TabRow(selectedTabIndex = selectedTabIndex,
             modifier = Modifier
                 .padding(horizontal = 8.dp)
@@ -131,43 +111,78 @@ fun ListScreen(navController: NavHostController, viewModel: ListScreenViewModel)
                 )
             }
         }
+
         Gap(8)
-        Pagination(currentPage = currentPage, totalPages = totalPages, onPageChange = {
-            currentPage = it
-        })
 
-        // Content based on selected tab
+        // Pagination Component
+        Pagination(
+            currentPage = currentPage,
+            totalPages = totalPages,
+            onPageChange = { newPage ->
+                viewModel.setCurrentPage(newPage)
+            }
+        )
+        val isNetworkAvailable = isNetworkAvailable(context)
+
+        // Handle content based on selected tab
         when (selectedTabIndex) {
-            0 -> {
-                if (localNowPlayingMovies == null) {
-                    ApiCallState(navController, nowPlayingList, onSuccess = {
-                        viewModel.insertMovieDbResultNowPlaying(it)
-                    })
-                } else {
-                    ListContent(navController, localNowPlayingMovies)
-                }
+            0 -> handleMovieContent(
+                navController,
+                localNowPlayingMovies,
+                nowPlayingList,
+                isNetworkAvailable(context)
+            ) {
+                viewModel.insertMovieDbResultNowPlaying(it)
             }
 
-            1 -> {
-                if (localPopularMovies == null) {
-                    ApiCallState(navController, popularList, onSuccess = {
-                        viewModel.insertMovieDbResultPopular(it)
-                    })
-                } else {
-                    ListContent(navController, localPopularMovies)
-                }
+            1 -> handleMovieContent(
+                navController,
+                localPopularMovies,
+                popularList,
+                isNetworkAvailable(context)
+            ) {
+                viewModel.insertMovieDbResultPopular(it)
             }
 
-            2 -> {
-                if (localUpcomingMovies == null) {
-                    ApiCallState(navController, upcomingList, onSuccess = {
-                        viewModel.insertMovieDbResultUpcoming(it)
-                    })
-                } else {
-                    ListContent(navController, localUpcomingMovies)
-                }
+            2 -> handleMovieContent(
+                navController,
+                localUpcomingMovies,
+                upcomingList,
+                isNetworkAvailable(context)
+
+            ) {
+                viewModel.insertMovieDbResultUpcoming(it)
             }
         }
     }
 }
 
+@Composable
+fun <T> handleMovieContent(
+    navController: NavController,
+    localMovies: T?,
+    remoteMovies: ApiState<T>,
+    isNetworkAvailable: Boolean,
+    onSuccess: @Composable (T) -> Unit
+) {
+    if (localMovies == null && isNetworkAvailable) {
+        ApiCallState(
+            navController,
+            remoteMovies,
+            onSuccess = onSuccess
+        )
+    } else if (localMovies != null) {
+        ListContent(navController, localMovies)
+    } else {
+        displayNoInternetMessage()
+    }
+}
+
+@Composable
+fun displayNoInternetMessage() {
+    Gap(height = 16)
+    LottieWithText(
+        R.raw.no_internet,
+        stringResource(R.string.no_internet_connection)
+    )
+}

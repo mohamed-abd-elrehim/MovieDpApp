@@ -136,7 +136,6 @@ fun DetailScreen(navController: NavHostController, viewModel: DetailViewModel, m
                 ) {
                     LoadAsyncImage(
                         context = context,
-
                         imageUrl = APIKeys.MOVIEDB_IMAGE_URL + movie?.backdrop_path,
                         movie?.title ?: " No Title ",
                         modifier = Modifier
