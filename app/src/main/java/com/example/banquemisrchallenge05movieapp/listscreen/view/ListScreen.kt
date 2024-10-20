@@ -1,6 +1,5 @@
 package com.example.banquemisrchallenge05movieapp.listscreen.view
 
-import android.util.Log
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
@@ -9,7 +8,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
@@ -37,7 +35,7 @@ import com.example.banquemisrchallenge05movieapp.utils.shared_components.Gap
 import com.example.banquemisrchallenge05movieapp.utils.shared_components.HeaderText
 import com.example.banquemisrchallenge05movieapp.utils.shared_components.LottieWithText
 import com.example.banquemisrchallenge05movieapp.utils.shared_models.ApiState
-import com.example.banquemisrchallenge05movieapp.utils.shared_models.isNetworkAvailable
+import com.example.banquemisrchallenge05movieapp.utils.shared_methods.isNetworkAvailable
 
 @Composable
 fun ListScreen(navController: NavHostController, viewModel: ListScreenViewModel) {

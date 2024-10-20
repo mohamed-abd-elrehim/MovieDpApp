@@ -1,6 +1,5 @@
 package com.example.banquemisrchallenge05movieapp.detailscreen.view
 
-import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
@@ -37,7 +36,7 @@ import com.example.banquemisrchallenge05movieapp.utils.shared_components.SharedH
 import com.example.banquemisrchallenge05movieapp.utils.shared_methods.LoadAsyncImage
 import com.example.banquemisrchallenge05movieapp.utils.shared_models.ApiState
 import com.example.banquemisrchallenge05movieapp.utils.shared_models.MovieDetails
-import com.example.banquemisrchallenge05movieapp.utils.shared_models.isNetworkAvailable
+import com.example.banquemisrchallenge05movieapp.utils.shared_methods.isNetworkAvailable
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable

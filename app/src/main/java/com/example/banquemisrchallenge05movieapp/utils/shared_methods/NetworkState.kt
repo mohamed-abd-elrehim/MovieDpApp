@@ -1,4 +1,4 @@
-package com.example.banquemisrchallenge05movieapp.utils.shared_models
+package com.example.banquemisrchallenge05movieapp.utils.shared_methods
 
 import android.content.Context
 import android.net.ConnectivityManager

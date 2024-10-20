@@ -2,7 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
-    id ("kotlin-kapt")
+    id("kotlin-kapt")
 
 }
 
@@ -58,8 +58,14 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
+
+    // for testing
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.1")
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.8.1")
+
+
     // Koin for Android
-    implementation ("io.insert-koin:koin-androidx-compose: 3.4.3")
+    implementation("io.insert-koin:koin-androidx-compose: 3.4.3")
     implementation("io.insert-koin:koin-androidx-compose:3.4.3")
 
 
@@ -71,8 +77,8 @@ dependencies {
     implementation("com.airbnb.android:lottie-compose:6.0.0")
 
     //Navigation
-    implementation ("androidx.navigation:navigation-compose:2.8.3")
-    implementation ("androidx.navigation:navigation-runtime-ktx:2.8.3")
+    implementation("androidx.navigation:navigation-compose:2.8.3")
+    implementation("androidx.navigation:navigation-runtime-ktx:2.8.3")
 
     //UI helpers
     implementation("androidx.compose.material:material:1.7.4")
@@ -81,20 +87,20 @@ dependencies {
 
     // Retrofit for API requests
     implementation("com.squareup.retrofit2:retrofit:2.11.0")
-    implementation ("com.squareup.retrofit2:converter-gson:2.11.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.11.0")
     implementation("com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.11")
 
     // ViewModel and LiveData for MVVM architecture
-    implementation ("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.6")
-    implementation ("androidx.lifecycle:lifecycle-livedata-ktx:2.8.6")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.6")
+    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.8.6")
 
     //Pager for images
-    implementation ("com.google.accompanist:accompanist-pager:0.32.0")
-    implementation ("com.google.accompanist:accompanist-pager-indicators:0.32.0")
+    implementation("com.google.accompanist:accompanist-pager:0.32.0")
+    implementation("com.google.accompanist:accompanist-pager-indicators:0.32.0")
 
     //Room
-    implementation ("androidx.room:room-runtime:2.6.1")
-    kapt ("androidx.room:room-compiler:2.6.1")
-    implementation ("androidx.room:room-ktx:2.6.1" )
+    implementation("androidx.room:room-runtime:2.6.1")
+    kapt("androidx.room:room-compiler:2.6.1")
+    implementation("androidx.room:room-ktx:2.6.1")
 
 }
