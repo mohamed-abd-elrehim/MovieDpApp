@@ -22,14 +22,17 @@ abstract class BaseViewModel : ViewModel() {
     val isRefreshing = _isRefreshing.asStateFlow()
 
 
-    protected val exceptionHandler = CoroutineExceptionHandler { _, exception ->
-        val errorMessage = when (exception) {
-            is IOException -> R.string.network_error
-            is HttpException -> R.string.server_error
-            is TimeoutException -> R.string.timeout_error
-            else -> R.string.unexpected_error
+     fun <T> createExceptionHandler(stateFlow: MutableStateFlow<ApiState<T>>): CoroutineExceptionHandler {
+        return CoroutineExceptionHandler { _, exception ->
+            val errorMessage = when (exception) {
+                is IOException -> R.string.network_error
+                is HttpException -> R.string.server_error
+                is TimeoutException -> R.string.timeout_error
+                else -> R.string.unexpected_error
+            }
+            stateFlow.value = ApiState.Error(errorMessage)
+            _isRefreshing.value = false
         }
-        _isRefreshing.value = false
     }
 
     protected fun <T> handleFetchList(
@@ -39,6 +42,8 @@ abstract class BaseViewModel : ViewModel() {
 
 
     ) {
+        val exceptionHandler = createExceptionHandler(stateFlow)
+
         viewModelScope.launch(Dispatchers.IO + exceptionHandler) {
             try {
                 fetch().collect { result ->

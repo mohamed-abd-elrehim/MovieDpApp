@@ -24,7 +24,6 @@ import retrofit2.Response
 
 class FakeRepositoryImpl: Repository {
 
-    var isServerError = false
 
     override suspend fun fetchUpcomingMovies(
         language: String,
@@ -104,19 +103,16 @@ class FakeRepositoryImpl: Repository {
 
     override fun getPopularMovies(page: Int): Flow<MovieDbResultPopular?> {
         val movie = fakePopularMovies.find { it.page == page }
-            ?: throw NoSuchElementException("Page $page not found")
         return flowOf(movie)
     }
 
     override fun getUpcomingMovies(page: Int): Flow<MovieDbResultUpcoming?> {
         val movie = fakeUpcomingMovies.find { it.page == page }
-            ?: throw NoSuchElementException("Page $page not found")
         return flowOf(movie)
     }
 
     override fun getNowPlayingMovies(page: Int): Flow<MovieDbResultNowPlaying?> {
         val movie = fakeNowPlayingMovies.find { it.page == page }
-            ?: throw NoSuchElementException("Page $page not found")
         return flowOf(movie)
     }
 

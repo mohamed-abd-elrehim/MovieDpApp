@@ -141,4 +141,7 @@ class DetailViewModelTest
         assertEquals(ApiState.Error(R.string.server_error), viewModel.movieDetails.value )
         assertEquals(false, viewModel.isRefreshing.value)
     }
+
+
+
 }
