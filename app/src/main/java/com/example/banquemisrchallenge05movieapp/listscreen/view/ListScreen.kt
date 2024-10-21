@@ -52,19 +52,19 @@ fun ListScreen(navController: NavHostController, viewModel: ListScreenViewModel)
     val tabs = listOf(NavigationKeys.NowPlaying, NavigationKeys.Popular, NavigationKeys.Upcoming)
     val totalPages by viewModel.totalPages.collectAsStateWithLifecycle()
     val currentPage by viewModel.currentPage.collectAsStateWithLifecycle()
+    val isNetworkAvailable = isNetworkAvailable(context)
 
+    var isLocalDataAvailable by remember { mutableStateOf(false) }
 
-    viewModel.getLocalMoviesIfAvailable(selectedTabIndex,currentPage)
+    // Fetch local movies initially
+    viewModel.getLocalMoviesIfAvailable(selectedTabIndex, currentPage)
 
-
-
-    // Fetch remote movies if no local movies are available
-    if (isNetworkAvailable(context)) {
-        LaunchedEffect( currentPage) {
+    // Trigger remote fetch if local data is not available
+    if (!isLocalDataAvailable && isNetworkAvailable) {
+        LaunchedEffect(currentPage) {
             viewModel.fetchRemoteMoviesIfLocalIsEmpty(selectedTabIndex, currentPage)
         }
     }
-
 
     Column(
         modifier = Modifier.background(Color.White)
@@ -128,7 +128,8 @@ fun ListScreen(navController: NavHostController, viewModel: ListScreenViewModel)
                     navController,
                     localNowPlayingMovies,
                     nowPlayingList,
-                    isNetworkAvailable(context)
+                    isNetworkAvailable(context),
+                    onLocalDataAvailable = { isLocalDataAvailable = it }
                 ) {
                     viewModel.insertMovieDbResultNowPlaying(it)
                 }
@@ -137,7 +138,8 @@ fun ListScreen(navController: NavHostController, viewModel: ListScreenViewModel)
                     navController,
                     localPopularMovies,
                     popularList,
-                    isNetworkAvailable(context)
+                    isNetworkAvailable(context),
+                    onLocalDataAvailable = { isLocalDataAvailable = it }
                 ) {
                     viewModel.insertMovieDbResultPopular(it)
                 }
@@ -146,7 +148,8 @@ fun ListScreen(navController: NavHostController, viewModel: ListScreenViewModel)
                     navController,
                     localUpcomingMovies,
                     upcomingList,
-                    isNetworkAvailable(context)
+                    isNetworkAvailable(context),
+                    onLocalDataAvailable = { isLocalDataAvailable = it }
 
                 ) {
                     viewModel.insertMovieDbResultUpcoming(it)
@@ -162,18 +165,30 @@ fun <T> handleMovieContent(
     localMovies: T?,
     remoteMovies: ApiState<T>,
     isNetworkAvailable: Boolean,
+    onLocalDataAvailable: (Boolean) -> Unit,
     onSuccess: @Composable (T) -> Unit
+
 ) {
-    if (localMovies == null && isNetworkAvailable) {
-        ApiCallState(
-            navController,
-            remoteMovies,
-            onSuccess = onSuccess
-        )
-    } else if (localMovies != null) {
-        ListContent(navController, localMovies)
-    } else {
-        displayNoInternetMessage()
+    when {
+        localMovies != null -> {
+            // Show local data if available
+            onLocalDataAvailable(true)
+            ListContent(navController, localMovies)
+        }
+        isNetworkAvailable -> {
+            // Fetch remote data when no local data is available and there's network access
+            onLocalDataAvailable(false)
+            ApiCallState(
+                navController,
+                remoteMovies,
+                onSuccess = onSuccess
+            )
+        }
+        else -> {
+            // Show no internet message if there's no data and no network connection
+            onLocalDataAvailable(false)
+            displayNoInternetMessage()
+        }
     }
 }
 
