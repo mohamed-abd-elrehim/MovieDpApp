@@ -26,7 +26,7 @@ class DetailViewModel(private val repository: Repository) : ViewModel() {
     private val _isRefreshing = MutableStateFlow(false)
     val isRefreshing = _isRefreshing.asStateFlow()
 
-    private val exceptionHandler = CoroutineExceptionHandler { _, exception ->
+    val exceptionHandler = CoroutineExceptionHandler { _, exception ->
         val errorMessage = when (exception) {
             is IOException -> R.string.network_error
             is HttpException -> R.string.server_error
