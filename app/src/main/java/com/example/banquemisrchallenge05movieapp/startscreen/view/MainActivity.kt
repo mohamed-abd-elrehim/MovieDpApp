@@ -8,20 +8,15 @@ import androidx.compose.material3.Surface
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.banquemisrchallenge05movieapp.detailscreen.viewModel.DetailScreenViewModelFactory
 import com.example.banquemisrchallenge05movieapp.detailscreen.viewModel.DetailViewModel
 import com.example.banquemisrchallenge05movieapp.listscreen.viewModel.ListScreenViewModel
-import com.example.banquemisrchallenge05movieapp.listscreen.viewModel.ListScreenViewModelFactory
 import com.example.banquemisrchallenge05movieapp.mainhome.view.MainHomeScreen
 import com.example.banquemisrchallenge05movieapp.startscreen.components.SplashLottie
-import com.example.banquemisrchallenge05movieapp.utils.data_layer.RepositoryImpl
-import com.example.banquemisrchallenge05movieapp.utils.data_layer.local.LocalDataSourceImpl
-import com.example.banquemisrchallenge05movieapp.utils.data_layer.remote.RemoteDataSourceImpl
 import com.example.banquemisrchallenge05movieapp.utils.di.appModule
 import com.example.banquemisrchallenge05movieapp.utils.navigation.Screen
 import com.example.banquemisrchallenge05movieapp.utils.shared_methods.InternetChecker
 import org.koin.android.ext.koin.androidContext
-import org.koin.androidx.compose.getViewModel
+import org.koin.androidx.viewmodel.ext.android.getViewModel
 import org.koin.core.context.startKoin
 
 

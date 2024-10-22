@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import com.example.banquemisrchallenge05movieapp.R
 
@@ -15,6 +16,7 @@ import com.example.banquemisrchallenge05movieapp.R
  fun MovieAppLoadingIndicator(modifier: Modifier = Modifier) {
     Row(
         modifier = modifier,
+
         horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically
     ) {

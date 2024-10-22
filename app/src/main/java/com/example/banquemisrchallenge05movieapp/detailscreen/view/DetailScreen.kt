@@ -108,21 +108,19 @@ fun DetailScreen(navController: NavHostController, viewModel: DetailViewModel, m
 
             stickyHeader {
                 ElevationCard(
-                    modifier = Modifier
-                        .fillMaxSize()
+
                 ) {
                     Box(
-                        modifier = Modifier
                     ) {
                         LoadAsyncImage(
                             context = context,
-                            imageUrl = APIKeys.MOVIEDB_IMAGE_URL + movie?.poster_path,
+                            imageUrl = APIKeys.MOVIEDB_IMAGE_URL + movie?.backdrop_path,
                             movie?.title ?: " No Title ",
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .height(500.dp)
+                                .height(400.dp)
                                 .clip(RoundedCornerShape(12.dp)),
-                            contentScale = ContentScale.Crop
+                            contentScale = ContentScale.FillBounds
 
                         )
 
@@ -230,7 +228,8 @@ fun DetailScreen(navController: NavHostController, viewModel: DetailViewModel, m
                             fontSize = 30.sp,
                             color = PrimaryColor,
                             modifier = Modifier.padding(start = 16.dp),
-                            textAlign = TextAlign.Start
+                            textAlign = TextAlign.Start,
+                            lineHeight = 30.sp
                         )
 
                         Gap(height = 8)
@@ -293,11 +292,20 @@ fun DetailScreen(navController: NavHostController, viewModel: DetailViewModel, m
 
                         Gap(height = 16)
                         MovieAppText(
-                            text = "${stringResource(R.string.production_companies)}: ${movie?.production_companies?.joinToString(", ") { it.name } ?: "Unknown Production Companies"}",
+                            text = "${stringResource(R.string.production_companies)}:",
                             fontSize = 16.sp,
-                            modifier = Modifier.padding(start = 16.dp),
+                            color = PrimaryColor,
+                            modifier = Modifier.padding(start = 16.dp)
+                        )
+                        Gap(height = 8)
+                        Text(
+                            text = "${movie?.production_companies?.joinToString(", ") { it.name } ?: "Unknown Production Companies"}",
+                            fontSize = 16.sp,
+                            modifier = Modifier.padding(start = 25.dp , end = 16.dp),
+                            lineHeight = 25.sp,
                             color = PrimaryColor
                         )
+
                     }
                 }
 

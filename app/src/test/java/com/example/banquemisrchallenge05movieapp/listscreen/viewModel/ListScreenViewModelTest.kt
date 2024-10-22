@@ -22,7 +22,9 @@ import junit.framework.TestCase.assertNull
 import kotlinx.coroutines.CoroutineName
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.runBlocking
+import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.ResponseBody
+import okhttp3.ResponseBody.Companion.toResponseBody
 import retrofit2.HttpException
 import retrofit2.Response
 import retrofit2.Response.*
@@ -230,7 +232,8 @@ class ListScreenViewModelTest {
     @Test
     fun `test fetchNowPlayingMovies IOException error handling`() = runTest {
         // Create a MutableStateFlow to simulate the API state
-        val nowPlayingListState = MutableStateFlow<ApiState<MovieDbResultNowPlaying>>(ApiState.Loading)
+        val nowPlayingListState =
+            MutableStateFlow<ApiState<MovieDbResultNowPlaying>>(ApiState.Loading)
 
         // Create a CoroutineExceptionHandler using the nowPlayingListState
         val exceptionHandler = viewModel.createExceptionHandler(nowPlayingListState)
@@ -401,6 +404,7 @@ class ListScreenViewModelTest {
         assertEquals(R.string.server_error, (upcomingState.value as ApiState.Error).message)
         assertEquals(false, viewModel.isRefreshing.value)
     }
+
 
 
 }

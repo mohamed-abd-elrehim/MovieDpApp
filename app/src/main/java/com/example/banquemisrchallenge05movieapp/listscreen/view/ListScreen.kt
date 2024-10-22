@@ -82,16 +82,8 @@ fun ListScreen(navController: NavHostController, viewModel: ListScreenViewModel)
             startY = 100f))
             .fillMaxSize()
     ) {
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 16.dp),
-            contentAlignment = Alignment.Center
-        ) {
-            HeaderText(headerText = "List Screen")
-        }
 
-        Gap(height = 16)
+        Gap(height = 30)
         TabRow(selectedTabIndex = selectedTabIndex,
             modifier = Modifier
                 .padding(horizontal = 8.dp)

@@ -1,3 +1,5 @@
+import com.android.build.api.dsl.Packaging
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -9,7 +11,13 @@ plugins {
 android {
     namespace = "com.example.banquemisrchallenge05movieapp"
     compileSdk = 35
-
+    packaging{
+        resources {
+            excludes += "/META-INF/{AL2.0,LGPL2.1}"
+            merges += "META-INF/LICENSE.md"
+            merges += "META-INF/LICENSE-notice.md"
+        }
+    }
     defaultConfig {
         applicationId = "com.example.banquemisrchallenge05movieapp"
         minSdk = 24
@@ -39,6 +47,8 @@ android {
         compose = true
     }
 }
+val koinVersion = "3.4.0"
+val mockkVersion = "1.13.13"
 
 dependencies {
 
@@ -58,17 +68,28 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
+    androidTestImplementation ("io.mockk:mockk-android:${mockkVersion}")
+
+    testImplementation (libs.junit)
+    androidTestImplementation (libs.androidx.junit)
+    androidTestImplementation (libs.androidx.espresso.core)
 
     // for testing
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.1")
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.8.1")
+    // Compose UI testing
+    debugImplementation ("androidx.compose.ui:ui-tooling")
+    debugImplementation ("androidx.compose.ui:ui-test-manifest:1.7.4")
 
 
     // Koin for Android
-    implementation("io.insert-koin:koin-androidx-compose: 3.4.3")
-    implementation("io.insert-koin:koin-androidx-compose:3.4.3")
+    implementation("io.insert-koin:koin-androidx-compose:$koinVersion") // Correct dependency
+    implementation("io.insert-koin:koin-android:$koinVersion") // Add Koin Android
+    implementation("io.insert-koin:koin-android-test:$koinVersion") // For Android testing
+    testImplementation("io.insert-koin:koin-test:$koinVersion") // Koin testing
 
-
+    // Testing dependencies
+    androidTestImplementation ("androidx.compose.ui:ui-test-junit4:1.7.4")
     //Coil for images
     implementation("io.coil-kt:coil-compose:2.0.0")
     implementation("io.coil-kt:coil-gif:2.4.0")
