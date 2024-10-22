@@ -1,20 +1,25 @@
 package com.example.banquemisrchallenge05movieapp.listscreen.components
 
 import android.content.Context
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import coil.compose.rememberImagePainter
 import com.example.banquemisrchallenge05movieapp.ui.theme.PrimaryColor
 import com.example.banquemisrchallenge05movieapp.utils.constants.APIKeys
 import com.example.banquemisrchallenge05movieapp.utils.constants.NavigationKeys
@@ -32,11 +37,12 @@ fun ListScreenElevationCard(
         modifier = modifier
             .padding(10.dp)
             .size(180.dp, 150.dp),
-        shape = RoundedCornerShape(12.dp),
+        shape = RoundedCornerShape(15.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 10.dp),
         colors = CardDefaults.cardColors(containerColor = Color.White),
         onClick = {
             movieResult?.let {
+
                 navController.navigate("${NavigationKeys.DetailScreen}/${it.id}")
             }
         }
@@ -67,9 +73,9 @@ fun ListScreenElevationCard(
                                 .align(Alignment.TopStart)
                                 .background(
                                     PrimaryColor.copy(alpha = 0.7f),
-                                    RoundedCornerShape(10.dp)
+                                    RoundedCornerShape(15.dp)
                                 )
-                                .padding(4.dp)
+                                .padding(10.dp)
 
                         )
                     }
@@ -105,4 +111,3 @@ fun ListScreenElevationCard(
 
     }
 }
-

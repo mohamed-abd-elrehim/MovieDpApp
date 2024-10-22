@@ -40,6 +40,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             MaterialTheme {
                 Surface {
+
                     val navController = rememberNavController()
 
                   NavHost(navController, startDestination = Screen.SplashScreen.route) {

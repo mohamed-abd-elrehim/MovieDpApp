@@ -6,6 +6,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
@@ -16,6 +17,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalContext
@@ -31,6 +33,7 @@ import com.example.banquemisrchallenge05movieapp.listscreen.components.ApiCallSt
 import com.example.banquemisrchallenge05movieapp.listscreen.components.ListContent
 import com.example.banquemisrchallenge05movieapp.listscreen.components.Pagination
 import com.example.banquemisrchallenge05movieapp.listscreen.viewModel.ListScreenViewModel
+import com.example.banquemisrchallenge05movieapp.ui.theme.PrimaryColor2
 import com.example.banquemisrchallenge05movieapp.utils.shared_components.Gap
 import com.example.banquemisrchallenge05movieapp.utils.shared_components.HeaderText
 import com.example.banquemisrchallenge05movieapp.utils.shared_components.LottieWithText
@@ -48,13 +51,18 @@ fun ListScreen(navController: NavHostController, viewModel: ListScreenViewModel)
     val localNowPlayingMovies by viewModel.localNowPlayingList.collectAsStateWithLifecycle()
     val localUpcomingMovies by viewModel.localUpcomingList.collectAsStateWithLifecycle()
 
-    var selectedTabIndex by remember { mutableIntStateOf(0) }
+    val selectedTabIndex by viewModel.selectedTabIndex.collectAsStateWithLifecycle()
     val tabs = listOf(NavigationKeys.NowPlaying, NavigationKeys.Popular, NavigationKeys.Upcoming)
     val totalPages by viewModel.totalPages.collectAsStateWithLifecycle()
     val currentPage by viewModel.currentPage.collectAsStateWithLifecycle()
     val isNetworkAvailable = isNetworkAvailable(context)
 
+    var goToNextPage by remember { mutableStateOf(false) }
+
+
+
     var isLocalDataAvailable by remember { mutableStateOf(false) }
+
 
     // Fetch local movies initially
     viewModel.getLocalMoviesIfAvailable(selectedTabIndex, currentPage)
@@ -67,7 +75,12 @@ fun ListScreen(navController: NavHostController, viewModel: ListScreenViewModel)
     }
 
     Column(
-        modifier = Modifier.background(Color.White)
+        modifier = Modifier
+
+            .background(brush = Brush.verticalGradient(
+            colors = listOf( Color.White,Color.White,PrimaryColor),
+            startY = 100f))
+            .fillMaxSize()
     ) {
         Box(
             modifier = Modifier
@@ -82,9 +95,9 @@ fun ListScreen(navController: NavHostController, viewModel: ListScreenViewModel)
         TabRow(selectedTabIndex = selectedTabIndex,
             modifier = Modifier
                 .padding(horizontal = 8.dp)
-                .clip(MaterialTheme.shapes.medium)
-                .background(Color.White),
+                .clip(MaterialTheme.shapes.medium),
             indicator = {},
+            containerColor = Color.Transparent,
             divider = {}) {
             tabs.forEachIndexed { index, title ->
                 val scale by animateFloatAsState(
@@ -98,7 +111,7 @@ fun ListScreen(navController: NavHostController, viewModel: ListScreenViewModel)
                             color = if (selectedTabIndex == index) Color.White else Color.Black
                         )
                     },
-                    onClick = { selectedTabIndex = index },
+                    onClick = { viewModel.setSelectedTabIndex(index)},
                     selected = selectedTabIndex == index,
                     modifier = Modifier
                         .padding(horizontal = 7.dp)
@@ -117,6 +130,7 @@ fun ListScreen(navController: NavHostController, viewModel: ListScreenViewModel)
             currentPage = currentPage,
             totalPages = totalPages,
             onPageChange = { newPage ->
+                goToNextPage = true
                 viewModel.setCurrentPage(newPage)
             }
         )
@@ -128,9 +142,12 @@ fun ListScreen(navController: NavHostController, viewModel: ListScreenViewModel)
                     navController,
                     localNowPlayingMovies,
                     nowPlayingList,
+                    goToNextPage,
                     isNetworkAvailable(context),
-                    onLocalDataAvailable = { isLocalDataAvailable = it }
+                    onLocalDataAvailable = { isLocalDataAvailable = it },
                 ) {
+                    ListContent(navController, it,goToNextPage)
+                    goToNextPage = false
                     viewModel.insertMovieDbResultNowPlaying(it)
                 }
 
@@ -138,9 +155,12 @@ fun ListScreen(navController: NavHostController, viewModel: ListScreenViewModel)
                     navController,
                     localPopularMovies,
                     popularList,
+                    goToNextPage,
                     isNetworkAvailable(context),
                     onLocalDataAvailable = { isLocalDataAvailable = it }
                 ) {
+                    ListContent(navController, it ,goToNextPage)
+                    goToNextPage = false
                     viewModel.insertMovieDbResultPopular(it)
                 }
 
@@ -148,10 +168,13 @@ fun ListScreen(navController: NavHostController, viewModel: ListScreenViewModel)
                     navController,
                     localUpcomingMovies,
                     upcomingList,
+                    goToNextPage,
                     isNetworkAvailable(context),
                     onLocalDataAvailable = { isLocalDataAvailable = it }
 
                 ) {
+                    ListContent(navController, it ,goToNextPage)
+                    goToNextPage = false
                     viewModel.insertMovieDbResultUpcoming(it)
                 }
             }
@@ -164,6 +187,7 @@ fun <T> handleMovieContent(
     navController: NavController,
     localMovies: T?,
     remoteMovies: ApiState<T>,
+    goToNextPage: Boolean,
     isNetworkAvailable: Boolean,
     onLocalDataAvailable: (Boolean) -> Unit,
     onSuccess: @Composable (T) -> Unit
@@ -173,7 +197,7 @@ fun <T> handleMovieContent(
         localMovies != null -> {
             // Show local data if available
             onLocalDataAvailable(true)
-            ListContent(navController, localMovies)
+            ListContent(navController, localMovies , goToNextPage)
         }
         isNetworkAvailable -> {
             // Fetch remote data when no local data is available and there's network access

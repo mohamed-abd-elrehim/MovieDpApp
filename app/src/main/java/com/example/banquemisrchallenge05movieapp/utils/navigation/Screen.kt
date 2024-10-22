@@ -1,5 +1,6 @@
 package com.example.banquemisrchallenge05movieapp.utils.navigation
 
+import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
@@ -38,10 +39,11 @@ sealed class Screen(val route: String, val title: Int) {
 
             composable(
                 route = NavigationKeys.DetailScreen + "/{movieId}",
-                arguments = listOf(navArgument("movieId") { type = NavType.IntType })
+                arguments = listOf(navArgument("movieId") { type = NavType.StringType })
             ) { backStackEntry ->
+
                 // Get the movieId from the arguments
-                val movieId = backStackEntry.arguments?.getInt("movieId")
+                val movieId = backStackEntry.arguments?.getString("movieId")
                 if (movieId != null) {
                     DetailScreen(navController, viewModel = detailScreenViewModel,movieId = movieId)
                 }

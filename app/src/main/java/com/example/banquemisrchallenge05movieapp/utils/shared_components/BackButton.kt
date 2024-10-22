@@ -4,8 +4,10 @@ package com.example.banquemisrchallenge05movieapp.utils.shared_components
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentWidth
 
@@ -19,21 +21,19 @@ import androidx.compose.ui.unit.dp
 import com.example.banquemisrchallenge05movieapp.R
 
 @Composable
-fun BackButton(onBackClick: () -> Unit) {
-    Box (modifier = Modifier.padding(top = 20.dp))
-    {
+fun BackButton(onBackClick: () -> Unit, modifier: Modifier = Modifier) {
+    Box(
+        modifier = modifier
+    ) {
         Image(
             painter = painterResource(id = R.drawable.ic_back),
-            modifier = Modifier
-                .height(65.dp)
-                .width(45.dp)
-                .wrapContentWidth(Alignment.Start)
-                .clickable {
-                    onBackClick()
-                },
             contentDescription = stringResource(R.string.back),
-            contentScale = ContentScale.Fit
+            contentScale = ContentScale.Fit,
+            modifier = Modifier
+                .size(30.dp)
+                .clickable { onBackClick() }
+                .align(Alignment.Center)
         )
+
     }
 }
-

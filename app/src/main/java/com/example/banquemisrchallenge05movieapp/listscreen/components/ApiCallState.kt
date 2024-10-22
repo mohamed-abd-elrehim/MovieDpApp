@@ -19,7 +19,7 @@ fun <T> ApiCallState(navController: NavController, apiState: ApiState<T> , onSuc
         }
 
         is ApiState.Success -> {
-            ListContent(navController , apiState.data)
+
             onSuccess(apiState.data)
 
         }

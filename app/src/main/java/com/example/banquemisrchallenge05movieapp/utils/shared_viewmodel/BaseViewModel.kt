@@ -38,7 +38,7 @@ abstract class BaseViewModel : ViewModel() {
     protected fun <T> handleFetchList(
         fetch: suspend () -> Flow<T>,
         stateFlow: MutableStateFlow<ApiState<T>>,
-        totalPage: MutableStateFlow<Int>
+        totalPage: MutableStateFlow<Int>? = null,
 
 
     ) {
@@ -51,16 +51,16 @@ abstract class BaseViewModel : ViewModel() {
 
                     when (result) {
                         is MovieDbResultNowPlaying -> {
-                            totalPage.value = result.total_pages
+                            totalPage?.value = result.total_pages
                         }
                         is MovieDbResultPopular -> {
-                            totalPage.value = result.total_pages
+                            totalPage?.value = result.total_pages
                         }
                         is MovieDbResultUpcoming -> {
-                            totalPage.value = result.total_pages
+                            totalPage?.value = result.total_pages
                         }
                         else -> {
-                            totalPage.value = 0
+                            totalPage?.value = 0
                         }
 
                     }

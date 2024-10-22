@@ -47,6 +47,13 @@ class ListScreenViewModel(private val repository: Repository) : BaseViewModel() 
         _currentPage.value = page
     }
 
+    private var _selectedTabIndex = MutableStateFlow<Int>(0)
+    val selectedTabIndex = _selectedTabIndex.asStateFlow()
+
+    fun setSelectedTabIndex(page: Int) {
+        _selectedTabIndex.value = page
+    }
+
     fun fetchNowPlayingList(page: Int) {
         handleFetchList(
             { repository.fetchNowPlayingMovies(page = page) },

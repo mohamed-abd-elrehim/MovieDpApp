@@ -6,6 +6,7 @@ import com.example.banquemisrchallenge05movieapp.R
 import com.example.banquemisrchallenge05movieapp.utils.data_layer.Repository
 import com.example.banquemisrchallenge05movieapp.utils.shared_models.ApiState
 import com.example.banquemisrchallenge05movieapp.utils.shared_models.MovieDetails
+import com.example.banquemisrchallenge05movieapp.utils.shared_viewmodel.BaseViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -26,6 +27,7 @@ class DetailViewModel(private val repository: Repository) : ViewModel() {
     private val _isRefreshing = MutableStateFlow(false)
     val isRefreshing = _isRefreshing.asStateFlow()
 
+
     val exceptionHandler = CoroutineExceptionHandler { _, exception ->
         val errorMessage = when (exception) {
             is IOException -> R.string.network_error
@@ -39,7 +41,7 @@ class DetailViewModel(private val repository: Repository) : ViewModel() {
 
 
     fun featchMovieDetails(movieId: Int) {
-        viewModelScope.launch(Dispatchers.IO + exceptionHandler) {
+       viewModelScope.launch(Dispatchers.IO + exceptionHandler) {
             _movieDetails.value = ApiState.Loading
 
 
@@ -75,6 +77,14 @@ class DetailViewModel(private val repository: Repository) : ViewModel() {
         }
 
 
+    }
+    fun getFormattedRuntime(durationInMinutes: Int): String {
+        // Calculate hours and remaining minutes
+        val hours = durationInMinutes / 60
+        val minutes = durationInMinutes % 60
+
+        // Format the output string
+        return "${hours} h : ${minutes} m"
     }
 }
 

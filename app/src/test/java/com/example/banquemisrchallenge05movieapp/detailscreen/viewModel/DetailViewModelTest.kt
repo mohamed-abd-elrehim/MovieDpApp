@@ -24,6 +24,7 @@ import java.util.concurrent.TimeoutException
 
 import okhttp3.MediaType
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.ResponseBody.Companion.toResponseBody
 import retrofit2.HttpException
 import retrofit2.Response
 class DetailViewModelTest
@@ -134,7 +135,9 @@ class DetailViewModelTest
 
     @Test
     fun `test server error handling`() = runBlocking {
-        val httpException = HttpException(Response.error<Any>(500, ResponseBody.create(null, "Server Error")))
+        val httpException = HttpException(Response.error<Any>(500,
+            "Server Error".toResponseBody(null)
+        ))
 
         viewModel.exceptionHandler.handleException(CoroutineName("test"), httpException)
 
