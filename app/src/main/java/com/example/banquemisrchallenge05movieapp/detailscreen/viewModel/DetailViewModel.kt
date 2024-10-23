@@ -23,9 +23,9 @@ class DetailViewModel(private val repository: Repository) : ViewModel() {
 
     private val _localMovieDetails = MutableStateFlow<MovieDetails?>(null)
     val localMovieDetails = _localMovieDetails.asStateFlow()
-
     private val _isRefreshing = MutableStateFlow(false)
     val isRefreshing = _isRefreshing.asStateFlow()
+
 
 
     val exceptionHandler = CoroutineExceptionHandler { _, exception ->
@@ -86,5 +86,8 @@ class DetailViewModel(private val repository: Repository) : ViewModel() {
         // Format the output string
         return "${hours} h : ${minutes} m"
     }
+
+
+
 }
 

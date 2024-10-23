@@ -11,6 +11,7 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
+
 class DetailScreenTest {
 
     lateinit var viewModel: DetailViewModel
@@ -37,6 +38,7 @@ class DetailScreenTest {
         }
 
         val movieDetails = (viewModel.movieDetails.value as ApiState.Success).data
+
 
         composeTestRule.onNodeWithText(expectedMovieDetails.title).assertIsDisplayed()
         composeTestRule.onNodeWithText(expectedMovieDetails.overview).assertIsDisplayed()

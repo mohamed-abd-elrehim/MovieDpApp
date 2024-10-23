@@ -1,10 +1,9 @@
-package com.example.banquemisrchallenge05movieapp.listscreen.components
+package com.example.banquemisrchallenge05movieapp.utils.shared_components
 
 import android.widget.Toast
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavController
-import com.example.banquemisrchallenge05movieapp.utils.shared_components.MovieAppLoadingIndicator
 import com.example.banquemisrchallenge05movieapp.utils.shared_models.ApiState
 
 

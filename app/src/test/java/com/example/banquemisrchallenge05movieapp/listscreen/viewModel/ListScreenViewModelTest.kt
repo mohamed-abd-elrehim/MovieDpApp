@@ -5,7 +5,6 @@ import com.example.banquemisrchallenge05movieapp.utils.shared_models.ApiState
 import com.example.banquemisrchallenge05movieapp.utils.test_utils.forapicalls.fakeNowPlayingMovies
 import com.example.banquemisrchallenge05movieapp.utils.test_utils.forapicalls.fakePopularMovies
 import com.example.banquemisrchallenge05movieapp.utils.test_utils.forapicalls.fakeUpcomingMovies
-import com.example.banquemisrchallenge05movieapp.utils.test_utils.forapicalls.movieDetailsList
 import junit.framework.TestCase.assertEquals
 import junit.framework.TestCase.assertTrue
 import kotlinx.coroutines.flow.first
@@ -22,11 +21,8 @@ import junit.framework.TestCase.assertNull
 import kotlinx.coroutines.CoroutineName
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.runBlocking
-import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.ResponseBody
-import okhttp3.ResponseBody.Companion.toResponseBody
 import retrofit2.HttpException
-import retrofit2.Response
 import retrofit2.Response.*
 import java.io.IOException
 import java.util.concurrent.TimeoutException

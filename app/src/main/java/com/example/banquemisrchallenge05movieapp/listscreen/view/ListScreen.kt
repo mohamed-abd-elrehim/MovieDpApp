@@ -4,17 +4,14 @@ import androidx.compose.animation.Crossfade
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
@@ -29,14 +26,13 @@ import androidx.navigation.NavHostController
 import com.example.banquemisrchallenge05movieapp.R
 import com.example.banquemisrchallenge05movieapp.ui.theme.PrimaryColor
 import com.example.banquemisrchallenge05movieapp.utils.constants.NavigationKeys
-import com.example.banquemisrchallenge05movieapp.listscreen.components.ApiCallState
+import com.example.banquemisrchallenge05movieapp.utils.shared_components.ApiCallState
 import com.example.banquemisrchallenge05movieapp.listscreen.components.ListContent
 import com.example.banquemisrchallenge05movieapp.listscreen.components.Pagination
 import com.example.banquemisrchallenge05movieapp.listscreen.viewModel.ListScreenViewModel
-import com.example.banquemisrchallenge05movieapp.ui.theme.PrimaryColor2
 import com.example.banquemisrchallenge05movieapp.utils.shared_components.Gap
-import com.example.banquemisrchallenge05movieapp.utils.shared_components.HeaderText
 import com.example.banquemisrchallenge05movieapp.utils.shared_components.LottieWithText
+import com.example.banquemisrchallenge05movieapp.utils.shared_components.displayNoInternetMessage
 import com.example.banquemisrchallenge05movieapp.utils.shared_models.ApiState
 import com.example.banquemisrchallenge05movieapp.utils.shared_methods.isNetworkAvailable
 
@@ -103,7 +99,9 @@ fun ListScreen(navController: NavHostController, viewModel: ListScreenViewModel)
                             color = if (selectedTabIndex == index) Color.White else Color.Black
                         )
                     },
-                    onClick = { viewModel.setSelectedTabIndex(index)},
+                    onClick = { viewModel.setSelectedTabIndex(index)
+                              viewModel.setCurrentPage(1)
+                              },
                     selected = selectedTabIndex == index,
                     modifier = Modifier
                         .padding(horizontal = 7.dp)
@@ -124,6 +122,7 @@ fun ListScreen(navController: NavHostController, viewModel: ListScreenViewModel)
             onPageChange = { newPage ->
                 goToNextPage = true
                 viewModel.setCurrentPage(newPage)
+
             }
         )
         val isNetworkAvailable = isNetworkAvailable(context)
@@ -208,11 +207,3 @@ fun <T> handleMovieContent(
     }
 }
 
-@Composable
-fun displayNoInternetMessage() {
-    Gap(height = 16)
-    LottieWithText(
-        R.raw.no_internet,
-        stringResource(R.string.no_internet_connection)
-    )
-}
